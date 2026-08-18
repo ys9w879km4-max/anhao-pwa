@@ -3,7 +3,7 @@
   "short_name": "暗号",
   "description": "本地角色随机抽取器",
   "lang": "zh-CN",
-  "start_url": "./暗号_PWA版.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
