@@ -28,15 +28,15 @@
 html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Helvetica Neue",sans-serif;background:linear-gradient(180deg,#f7f3f8 0%,#eee8f2 100%);color:var(--ink)}
 button,input,select{font:inherit}
 button{cursor:pointer}
-.app{max-width:1100px;margin:0 auto;padding:18px 18px 130px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.app{max-width:1100px;margin:0 auto;padding:12px 14px 126px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
 .brand{display:flex;align-items:center;gap:10px}
 .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--purple),#c36ee0);color:white;display:grid;place-items:center;font-size:22px;box-shadow:0 8px 18px rgba(139,63,190,.25)}
 .brand h1{font-size:20px;margin:0;font-weight:800}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
 .top-actions{display:flex;gap:8px}.icon-btn,.ghost-btn{border:1px solid var(--line);background:white;color:#111;border-radius:12px;padding:10px 13px;box-shadow:0 4px 12px rgba(60,30,80,.05)}
-.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:16px}
+.layout{display:block}
 .card{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.8);border-radius:24px;box-shadow:var(--shadow)}
-.draw-card{padding:22px;min-height:610px;display:flex;flex-direction:column}
+.draw-card{padding:16px;min-height:calc(100dvh - 190px);display:flex;flex-direction:column}
 .filter-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .filter-label{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap}
 .selector{flex:1;min-width:0;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
@@ -48,10 +48,10 @@ button{cursor:pointer}
 .result-empty{text-align:center;color:var(--muted);padding:70px 10px}.result-empty .big{font-size:52px;margin-bottom:8px}
 
 /* ===== 抽取动画：紫色问号卡牌 → 翻转 → 角色名 ===== */
-.draw-card .result-area{min-height:390px}
+.draw-card .result-area{min-height:calc(100dvh - 330px);}
 .draw-result-stage{width:100%;display:flex;align-items:center;justify-content:center}
-.draw-result-grid{width:min(820px,100%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px}
-.flip-card{width:190px;height:270px;perspective:1200px}
+.draw-result-grid{width:min(940px,100%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:22px}
+.flip-card{width:210px;height:300px;perspective:1200px}
 .flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d}
 .flip-card.back .flip-inner{transform:rotateY(0deg)}
 .flip-card.front .flip-inner{transform:rotateY(180deg)}
@@ -91,23 +91,86 @@ button{cursor:pointer}
 .manage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.manage-btn{padding:12px;border:1px solid var(--line);background:#fff;border-radius:13px;text-align:left}.manage-btn b{display:block}.manage-btn span{font-size:11px;color:var(--muted)}
 .backup-row{display:flex;gap:8px}.backup-row button{flex:1}
 .footer-note{text-align:center;color:#9b92a0;font-size:11px;margin-top:16px}
-.overlay{position:fixed;inset:0;background:rgba(39,25,45,.35);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:20;box-sizing:border-box}.overlay.show{display:flex}
-.modal{width:min(760px,100%);max-height:90vh;max-height:90dvh;background:#fff;border-radius:26px 26px 0 0;padding:18px;display:flex;flex-direction:column;box-shadow:0 -20px 50px rgba(40,20,50,.2);box-sizing:border-box;overflow:hidden}
-/* iPad 横屏：密码和设置改为居中弹窗，并允许完整滚动，避免按钮落到屏幕下方 */
-#passwordModal,#settingsModal{align-items:center;padding:12px 16px calc(12px + env(safe-area-inset-bottom));overflow:auto;-webkit-overflow-scrolling:touch}
-#passwordModal .modal,#settingsModal .modal{border-radius:24px;max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;box-shadow:0 18px 60px rgba(40,20,50,.22)}
+.overlay{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(39,25,45,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;box-sizing:border-box;padding:12px env(safe-area-inset-right) calc(12px + env(safe-area-inset-bottom)) env(safe-area-inset-left);overflow:hidden}.overlay.show{display:flex}
+#settingsModal,#passwordModal,#formModal,#dataModal,#filterModal,#historyModal{align-items:center !important;justify-content:center;padding:12px env(safe-area-inset-right) calc(12px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+#settingsModal{z-index:120}#filterModal{z-index:130}#historyModal{z-index:135}#formModal,#dataModal{z-index:140}#passwordModal{z-index:150}
+.modal{width:min(760px,100%);max-height:calc(var(--vvh, 100dvh) - 24px);background:#fff;border-radius:26px;padding:18px;display:flex;flex-direction:column;box-shadow:0 18px 60px rgba(40,20,50,.2);box-sizing:border-box;overflow:hidden}
+/* 二级弹窗必须盖在设置和底部抽取栏之上；弹窗内部独立滚动，iPad 横竖屏都可操作 */
+#passwordModal .modal,#settingsModal .modal,#formModal .modal,#dataModal .modal{border-radius:24px;max-height:calc(var(--vvh, 100dvh) - 24px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;box-shadow:0 18px 60px rgba(40,20,50,.22)}
+#formModal .modal,#dataModal .modal{width:min(560px,92vw)}
+#dataModal{align-items:center !important;justify-content:center !important;overflow:hidden}
+#dataModal .modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(620px,92vw);height:min(78dvh,calc(var(--vvh, 100dvh) - 24px),620px);max-height:calc(var(--vvh, 100dvh) - 24px);min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:16px;margin:0}
+#dataModal .modal-head{flex:0 0 auto}
+#dataModal .modal-head{flex:0 0 auto;position:sticky;top:0;background:#fff;z-index:2;margin:-2px 0 10px;padding:2px 0 10px;border-bottom:1px solid #eee8f0}
+#dataModal #dataBody{flex:1 1 auto;min-height:0;max-height:none;overflow:auto;-webkit-overflow-scrolling:touch;padding-right:2px}
+#historyModal{z-index:135}
+#historyModal .history-modal{width:min(680px,92vw);height:min(78dvh,calc(var(--vvh, 100dvh) - 24px),620px);max-height:calc(var(--vvh, 100dvh) - 24px);padding:16px}
+#historyModal .history-modal .history{flex:1 1 auto;min-height:0;max-height:none;overflow:auto;-webkit-overflow-scrolling:touch;padding-right:3px}
+#historyModal .history-modal .history-actions{flex:0 0 auto;border-top:1px solid #eee8f0;padding-top:10px;margin-top:8px}
 #passwordModal .password-modal{width:min(430px,92vw);max-width:430px}
 #settingsModal .settings-modal{width:min(860px,94vw);max-width:860px}
-@media (orientation:landscape) and (max-height:700px){
-  #passwordModal,#settingsModal{align-items:center;padding:10px 20px}
-  #passwordModal .modal,#settingsModal .modal{max-height:calc(100dvh - 20px)}
-  #settingsModal .settings-modal{padding:14px}
-  #passwordModal .password-modal{padding:16px}
+@media (orientation:landscape) and (max-height:820px){
+  #settingsModal,#passwordModal,#formModal,#dataModal,#filterModal,#historyModal{align-items:center !important;justify-content:center !important;padding:8px 12px}
+  #passwordModal .modal,#settingsModal .modal,#formModal .modal,#dataModal .modal{max-height:calc(var(--vvh, 100dvh) - 16px);border-radius:22px}
+  #settingsModal .settings-modal{width:min(860px,96vw);padding:12px}
+  #formModal .modal,#dataModal .modal{width:min(560px,92vw);padding:14px}
+  #dataModal .modal{width:min(620px,90vw);height:min(76dvh,calc(var(--vvh, 100dvh) - 16px),560px);max-height:calc(var(--vvh, 100dvh) - 16px);padding:14px}
+  #passwordModal .password-modal{width:min(430px,88vw);padding:14px}
+  .modal-head{margin-bottom:8px}
+  .settings-grid{gap:10px}
+  .settings-section{padding:12px}
+  .settings-actions{gap:8px}
+  .manage-btn{padding:10px 11px}
+  .settings-note{font-size:10px}
+}
+@media (orientation:landscape) and (max-height:820px){
+  .app{padding:7px 12px 116px}
+  .topbar{margin-bottom:6px}
+  .header-strip{padding:4px 7px;border-radius:13px}
+  .header-title{font-size:19px}
+  .top-nav-btn{min-width:78px;padding:5px 8px;border-radius:11px}
+  .top-nav-btn b{font-size:12px}.top-nav-btn small{font-size:9px;margin-top:1px}
+  .top-nav-icon{width:20px;height:20px;border-radius:7px;font-size:11px}
+  .draw-card{min-height:calc(100dvh - 165px);padding:12px;border-radius:20px}
+  .draw-card .result-area{min-height:calc(100dvh - 300px);padding:8px 0}
+  .draw-result-grid{gap:16px}
+  .flip-card{width:190px;height:270px}
+  .pool-modal{width:min(920px,94vw);height:min(620px,calc(100dvh - 18px));max-height:calc(var(--vvh, 100dvh) - 18px);padding:11px 14px 10px}
+  .pool-top{padding-bottom:6px}.pool-top h3{font-size:18px}.pool-sub{font-size:10px;margin-top:3px}
+  .pool-toolbar{margin-bottom:6px}.pool-search-wrap{height:34px}.pool-action{height:32px;padding:0 10px}
+  .pool-series-grid{gap:7px}.pool-series-card{min-height:56px;padding:8px 10px;border-radius:14px}.pool-series-card .pool-icon{width:34px;height:34px;border-radius:10px;font-size:17px}
+  .pool-series-name{font-size:13px}.pool-series-meta{font-size:10px;margin-top:2px}.pool-bottom{padding-top:7px}.pool-confirm{padding:10px 20px}
+  #historyModal .history-modal{width:min(700px,92vw);height:min(78dvh,calc(var(--vvh, 100dvh) - 24px),600px);padding:13px}
 }
 @media (orientation:portrait){
-  #passwordModal .modal,#settingsModal .modal{max-height:88dvh}
+  #passwordModal .modal,#settingsModal .modal,#formModal .modal,#dataModal .modal{max-height:88dvh}
+  #dataModal .modal{height:min(78dvh,calc(var(--vvh, 100dvh) - 24px),620px);max-height:calc(var(--vvh, 100dvh) - 16px)}
+}
+@media (max-height:560px){
+  #dataModal .modal{height:min(82dvh,calc(var(--vvh, 100dvh) - 12px));max-height:calc(var(--vvh, 100dvh) - 12px)}
+}
+@supports (-webkit-touch-callout:none){
+  #dataModal .modal{top:50%;left:50%;transform:translate3d(-50%,-50%,0)}
 }
 
+/* iPad / iOS 键盘安全区：键盘弹出时，所有弹窗跟随 VisualViewport 重新居中 */
+html{--vvh:100dvh;--vvtop:0px}
+.overlay.show{top:var(--vvtop,0px);height:var(--vvh,100dvh)}
+.modal{max-height:calc(var(--vvh,100dvh) - 24px);}
+#formModal .modal{overflow-y:auto;scroll-padding-top:18px;scroll-padding-bottom:28px}
+.pool-modal{max-height:calc(var(--vvh,100dvh) - 24px);}
+#filterModal .pool-modal{overflow:hidden}
+#historyModal .history-modal,#settingsModal .settings-modal,#passwordModal .password-modal,#formModal .modal,#dataModal .modal{box-sizing:border-box}
+body.keyboard-open .overlay{padding-top:6px;padding-bottom:6px}
+body.keyboard-open #formModal .modal{width:min(560px,94vw)}
+
+#formModal .form{padding-bottom:2px}
+#formModal .modal-foot{margin-top:2px}
+body.keyboard-open #formModal .modal{max-height:calc(var(--vvh,100dvh) - 12px);}
+body.keyboard-open #passwordModal .modal{max-height:calc(var(--vvh,100dvh) - 12px);}
+body.keyboard-open #settingsModal .modal{max-height:calc(var(--vvh,100dvh) - 12px);}
+body.keyboard-open #filterModal .pool-modal{max-height:calc(var(--vvh,100dvh) - 12px);height:min(620px,calc(var(--vvh,100dvh) - 12px));}
+body.keyboard-open #historyModal .history-modal{max-height:calc(var(--vvh,100dvh) - 12px);height:min(600px,calc(var(--vvh,100dvh) - 12px));}
 .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.modal-head h3{margin:0;font-size:19px}.close{border:0;background:#f4eff6;border-radius:50%;width:36px;height:36px}
 .search{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px 14px;outline:none;margin-bottom:12px}.search:focus{border-color:#c79bd8;box-shadow:0 0 0 3px #f3e8f7}
 .tree{overflow:auto;padding:2px 0 12px}.cat{border:1px solid #eee7f1;border-radius:16px;margin-bottom:9px;overflow:hidden}.cat-head,.series-head{display:flex;align-items:center;gap:10px;padding:12px 13px}.cat-head{background:#fbf9fc}.series-list{padding:0 10px 10px}.series{border-top:1px solid #f0ebf2}.series-head{padding:10px 3px}.series-name{flex:1;font-weight:700}.qty{color:var(--muted);font-size:12px}.check{width:20px;height:20px;accent-color:var(--purple);flex:0 0 auto}.select-actions{display:flex;gap:8px;margin-left:auto}.mini{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 9px;font-size:11px;color:#111}
@@ -116,12 +179,12 @@ button{cursor:pointer}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:#302a35;color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;z-index:50;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ===== 顶部：暗号 + 卡池 ===== */
-.header-strip{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(135deg,#ead8f2 0%,#f3e9f6 100%);border:1px solid rgba(139,63,190,.10);border-radius:18px;padding:10px 12px;box-shadow:0 7px 18px rgba(80,45,100,.07)}
-.header-title{font-size:24px;font-weight:900;letter-spacing:1px;color:#111;flex:1;padding-left:7px}
-.header-nav{display:flex;align-items:center;gap:8px}
-.top-nav-btn{min-width:88px;border:1px solid #cbd2df;background:#f4f6fb;border-radius:16px;padding:8px 13px;display:flex;align-items:center;justify-content:center;gap:7px;text-align:left;color:#111;box-shadow:0 3px 10px rgba(50,60,80,.06)}
+.header-strip{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(135deg,#ead8f2 0%,#f3e9f6 100%);border:1px solid rgba(139,63,190,.10);border-radius:15px;padding:6px 8px;box-shadow:0 7px 18px rgba(80,45,100,.07)}
+.header-title{font-size:21px;font-weight:900;letter-spacing:1px;color:#111;flex:1;padding-left:7px}
+.header-nav{display:flex;align-items:center;gap:6px}
+.top-nav-btn{min-width:82px;border:1px solid #cbd2df;background:#f4f6fb;border-radius:13px;padding:6px 10px;display:flex;align-items:center;justify-content:center;gap:7px;text-align:left;color:#111;box-shadow:0 3px 10px rgba(50,60,80,.06)}
 .top-nav-btn.active{background:#fff;border-color:#8b3fbe;box-shadow:0 4px 12px rgba(139,63,190,.10)}
-.top-nav-btn b{display:block;font-size:14px;line-height:1.1}.top-nav-btn small{display:block;margin-top:3px;color:#666;font-size:10px;white-space:nowrap}.top-nav-icon{width:26px;height:26px;border-radius:8px;background:#8b3fbe;color:#fff;display:grid;place-items:center;font-size:13px}
+.top-nav-btn b{display:block;font-size:14px;line-height:1.1}.top-nav-btn small{display:block;margin-top:3px;color:#666;font-size:10px;white-space:nowrap}.top-nav-icon{width:22px;height:22px;border-radius:8px;background:#8b3fbe;color:#fff;display:grid;place-items:center;font-size:13px}
 .pool-header-btn{min-width:220px;border:1px solid rgba(139,63,190,.16);background:rgba(255,255,255,.82);border-radius:14px;padding:9px 12px;display:flex;align-items:center;gap:9px;text-align:left;color:#111;box-shadow:0 4px 12px rgba(80,45,100,.05)}
 .pool-header-icon{width:34px;height:34px;border-radius:10px;background:#8b3fbe;color:#fff;display:grid;place-items:center;font-size:16px}
 .pool-header-btn span:nth-child(2){min-width:0;flex:1}.pool-header-btn b{display:block;font-size:14px;color:#111}.pool-header-btn small{display:block;margin-top:2px;color:#111;font-size:10px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pool-header-arrow{font-size:18px;color:#111}
@@ -132,23 +195,23 @@ button{cursor:pointer}
 .brand h1{font-size:25px;letter-spacing:1px}
 .password-modal{max-width:430px}
 /* ===== 卡池选择器升级版 ===== */
-.pool-modal{width:min(900px,100%);max-height:92vh;background:linear-gradient(180deg,#fff 0%,#fbf8fd 100%);border-radius:30px 30px 0 0;padding:20px 20px 14px;display:flex;flex-direction:column;box-shadow:0 -24px 70px rgba(56,25,73,.25);border:1px solid rgba(255,255,255,.9)}
-.pool-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:2px 2px 15px}
+.pool-modal{width:min(900px,94vw);height:min(620px,calc(100dvh - 24px));max-height:calc(var(--vvh, 100dvh) - 24px);background:linear-gradient(180deg,#fff 0%,#fbf8fd 100%);border-radius:24px;padding:14px 16px 12px;display:flex;flex-direction:column;box-shadow:0 -24px 70px rgba(56,25,73,.25);border:1px solid rgba(255,255,255,.9)}
+.pool-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:0 1px 9px;flex:0 0 auto}
 .pool-kicker{font-size:10px;letter-spacing:2.2px;color:#a57ab5;font-weight:900;margin-bottom:4px}
-.pool-top h3{font-size:24px;margin:0;color:#2d2532;letter-spacing:-.5px}
+.pool-top h3{font-size:20px;margin:0;color:#2d2532;letter-spacing:-.5px}
 .pool-sub{font-size:12px;color:#918696;margin-top:5px}
-.pool-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:13px}
-.pool-search-wrap{height:44px;flex:1;display:flex;align-items:center;gap:7px;background:#f5f0f7;border:1px solid #ebe2ef;border-radius:14px;padding:0 12px;color:#9a8ca0}
+.pool-toolbar{display:flex;align-items:center;gap:7px;margin-bottom:8px;flex:0 0 auto}
+.pool-search-wrap{height:38px;flex:1;display:flex;align-items:center;gap:7px;background:#f5f0f7;border:1px solid #ebe2ef;border-radius:14px;padding:0 12px;color:#9a8ca0}
 .pool-search-wrap input{width:100%;border:0;outline:0;background:transparent;color:#403746;font-size:14px}
-.pool-action{height:40px;border:1px solid #e4d9e8;background:#fff;color:#111;border-radius:12px;padding:0 12px;font-size:12px;font-weight:700}
+.pool-action{height:36px;border:1px solid #e4d9e8;background:#fff;color:#111;border-radius:12px;padding:0 12px;font-size:12px;font-weight:700}
 .pool-action:active{transform:scale(.97)}
-.pool-body{overflow:auto;padding:1px 2px 12px;min-height:180px;max-height:54vh}
+.pool-body{overflow:auto;padding:1px 2px 8px;min-height:0;max-height:none;flex:1 1 auto;-webkit-overflow-scrolling:touch}
 .pool-category{margin-bottom:12px}
 .pool-category-head{display:flex;align-items:center;gap:9px;padding:4px 3px 8px}
 .pool-category-head b{font-size:14px}
 .pool-category-head .cat-count{margin-left:auto;color:#9b90a1;font-size:11px}
 .pool-series-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.pool-series-card{position:relative;min-height:78px;border:1.5px solid #e8dfeb;border-radius:17px;background:#fff;padding:11px 12px;display:flex;align-items:center;gap:10px;overflow:hidden;transition:.18s;box-shadow:0 4px 12px rgba(80,45,100,.035)}
+.pool-series-card{position:relative;min-height:62px;border:1.5px solid #e8dfeb;border-radius:17px;background:#fff;padding:11px 12px;display:flex;align-items:center;gap:10px;overflow:hidden;transition:.18s;box-shadow:0 4px 12px rgba(80,45,100,.035)}
 .pool-series-card:active{transform:scale(.985)}
 .pool-series-card.selected{border-color:#a052c3;background:linear-gradient(135deg,#fbf4ff,#f5e9fa);box-shadow:0 7px 18px rgba(139,63,190,.12)}
 .pool-series-card.selected:after{content:"✓";position:absolute;right:10px;top:9px;width:21px;height:21px;border-radius:50%;background:#8b3fbe;color:white;display:grid;place-items:center;font-size:12px;font-weight:900}
@@ -159,7 +222,7 @@ button{cursor:pointer}
 .pool-series-meta{font-size:11px;color:#978b9d;margin-top:4px}
 .pool-series-check{position:absolute;opacity:0;pointer-events:none}
 .pool-empty{padding:42px 10px;text-align:center;color:#a39aa7}
-.pool-bottom{border-top:1px solid #ece6ee;padding-top:12px;display:flex;align-items:center;gap:12px}
+.pool-bottom{border-top:1px solid #ece6ee;padding-top:9px;flex:0 0 auto;display:flex;align-items:center;gap:12px}
 .pool-selected{display:flex;align-items:center;gap:6px;font-size:12px;color:#8b8190;min-width:0}
 .pool-selected b{color:#493c50;font-size:13px}
 .pool-selected i{height:15px;width:1px;background:#ddd3e0;margin:0 3px}
@@ -229,15 +292,16 @@ button{cursor:pointer}
       </div>
     </section>
 
-    <aside class="side">
-      <section class="card">
-        <div class="card-title"><h2>📜 抽取历史</h2><small id="historyCount">0 条</small></div>
-        <div class="history" id="history"></div>
-        <button class="secondary" style="width:100%;margin-top:10px" id="clearHistory">清空记录</button>
-      </section>
-    </aside>
   </main>
-  <div class="footer-note">适配 iPad / iPhone / 桌面浏览器 · 可添加到主屏幕使用</div>
+
+</div>
+
+<div class="overlay" id="historyModal">
+  <div class="modal history-modal">
+    <div class="modal-head"><div><div class="pool-kicker">HISTORY</div><h3>抽取历史 <small id="historyCount" style="font-size:11px;color:#918696;font-weight:600"></small></h3></div><button class="close" data-close="historyModal">×</button></div>
+    <div class="history" id="history"></div>
+    <div class="history-actions"><button class="secondary" style="width:100%" id="clearHistory">清空记录</button></div>
+  </div>
 </div>
 
 <div class="overlay" id="passwordModal">
@@ -328,7 +392,11 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 function toast(t){const x=$('#toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
-function openModal(id){$('#'+id).classList.add('show')} function closeModal(id){$('#'+id).classList.remove('show')}
+function syncVisualViewport(){const vv=window.visualViewport;const h=vv?.height||window.innerHeight;const top=vv?.offsetTop||0;document.documentElement.style.setProperty('--vvh',h+'px');document.documentElement.style.setProperty('--vvtop',top+'px');const keyboardOpen=!!vv&&window.innerHeight-vv.height>120;document.body.classList.toggle('keyboard-open',keyboardOpen);return keyboardOpen}
+function keepFocusedFieldVisible(el){if(!el)return;const modal=el.closest('.modal');if(!modal)return;setTimeout(()=>{try{el.scrollIntoView({block:'center',inline:'nearest',behavior:'smooth'})}catch(e){};try{const r=el.getBoundingClientRect(),mr=modal.getBoundingClientRect();if(r.bottom>mr.bottom-18)modal.scrollTop+=r.bottom-(mr.bottom-18);if(r.top<mr.top+18)modal.scrollTop-=((mr.top+18)-r.top)}catch(e){}},180)}
+function openModal(id){const el=$('#'+id);syncVisualViewport();el.classList.add('show');requestAnimationFrame(()=>{const modal=el.querySelector('.modal');if(modal){modal.scrollTop=0;const body=modal.querySelector('.list-scroll');if(body)body.scrollTop=0}const pool=el.querySelector('.pool-modal');if(pool){pool.scrollTop=0;const tree=pool.querySelector('.pool-series-scroll,.pool-tree,#filterTree');if(tree)tree.scrollTop=0}})}
+function closeModal(id){const el=$('#'+id);if(el)el.classList.remove('show');if(!document.querySelector('.overlay.show')){document.body.classList.remove('keyboard-open');if(document.activeElement&&['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))document.activeElement.blur()}}
+if(window.visualViewport){window.visualViewport.addEventListener('resize',()=>{syncVisualViewport();const active=document.activeElement;if(active&&['INPUT','SELECT','TEXTAREA'].includes(active.tagName))keepFocusedFieldVisible(active)});window.visualViewport.addEventListener('scroll',syncVisualViewport)}window.addEventListener('resize',syncVisualViewport);
 document.addEventListener('click',e=>{const c=e.target.closest('[data-close]');if(c)closeModal(c.dataset.close)});
 
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB,VER);r.onupgradeneeded=()=>{const d=r.result;['categories','series','roles','history'].forEach(n=>{if(!d.objectStoreNames.contains(n))d.createObjectStore(n,{keyPath:'id'})})};r.onsuccess=()=>{db=r.result;res()};r.onerror=()=>rej(r.error)})}
@@ -406,10 +474,10 @@ function renderData(){
 let managementUnlocked=false;
 function openManagement(){if(!managementUnlocked){showStartupPassword();return}openModal('settingsModal')}
 async function passwordHash(v){const data=new TextEncoder().encode(v);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('')}
-function showStartupPassword(){$('#passwordInput').value='';const has=!!localStorage.getItem('characterPickerPassword');$('#passwordHint').textContent=has?'请输入暗号密码后进入。':'首次使用请设置一个 4～12 位数字密码。';$('#passwordSubmit').textContent=has?'进入暗号':'设置密码并进入暗号';openModal('passwordModal');setTimeout(()=>$('#passwordInput').focus(),80)}
+function showStartupPassword(){$('#passwordInput').value='';const has=!!localStorage.getItem('characterPickerPassword');$('#passwordHint').textContent=has?'请输入暗号密码后进入。':'首次使用请设置一个 4～12 位数字密码。';$('#passwordSubmit').textContent=has?'进入暗号':'设置密码并进入暗号';openModal('passwordModal');setTimeout(()=>{const input=$('#passwordInput');input.focus({preventScroll:true});keepFocusedFieldVisible(input)},220)}
 $('#passwordSubmit').onclick=async()=>{const value=$('#passwordInput').value.trim();if(!/^\d{4,12}$/.test(value))return toast('请输入 4～12 位数字密码');const stored=localStorage.getItem('characterPickerPassword');const hashed=await passwordHash(value);if(!stored)localStorage.setItem('characterPickerPassword',hashed);else if(stored!==hashed)return toast('密码不正确');managementUnlocked=true;closeModal('passwordModal');toast('欢迎进入暗号')};
-$('#passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('#passwordSubmit').click()});
-$('#viewData').onclick=()=>{if(!managementUnlocked)return showStartupPassword();renderData();openModal('dataModal')};
+$('#passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('#passwordSubmit').click()});document.addEventListener('focusin',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))keepFocusedFieldVisible(e.target)});
+$('#viewData').onclick=()=>{if(!managementUnlocked)return showStartupPassword();renderData();openModal('dataModal');setTimeout(()=>$('#dataBody')?.focus?.(),0)};
 $('#lockManagement').onclick=()=>{managementUnlocked=false;closeModal('settingsModal');showStartupPassword()};
 $('#changePassword').onclick=async()=>{if(!managementUnlocked)return showStartupPassword();const v=prompt('请输入新的 4～12 位数字密码');if(!v)return;if(!/^\d{4,12}$/.test(v))return toast('请输入 4～12 位数字密码');localStorage.setItem('characterPickerPassword',await passwordHash(v));toast('密码已修改')};
 $('#addCategory').onclick=()=>{if(!managementUnlocked)return openManagement();form('category')};
@@ -421,7 +489,7 @@ function form(kind){
  if(kind==='category') body=`<div class="form"><input id="fName" placeholder="分类名称，例如：游戏"><div class="modal-foot"><button class="secondary" data-close="formModal">取消</button><button class="purple" id="saveForm">保存</button></div></div>`;
  if(kind==='series') body=`<div class="form"><input id="fName" placeholder="系列名称，例如：原神"><select id="fCat">${state.categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><div class="modal-foot"><button class="secondary" data-close="formModal">取消</button><button class="purple" id="saveForm">保存</button></div></div>`;
  if(kind==='role') body=`<div class="form"><input id="fName" placeholder="角色名称"><select id="fSeries">${state.series.map(s=>`<option value="${s.id}">${esc(categoryName(s.categoryId))} · ${esc(s.name)}</option>`).join('')}</select><label class="file-label">点击上传角色图片<input id="fFile" type="file" accept="image/*"></label><img id="fPreview" class="preview"><div class="modal-foot"><button class="secondary" data-close="formModal">取消</button><button class="purple" id="saveForm">保存</button></div></div>`;
- $('#formBody').innerHTML=body;openModal('formModal');
+ $('#formBody').innerHTML=body;openModal('formModal');setTimeout(()=>{const input=$('#fName');if(input){input.focus({preventScroll:true});keepFocusedFieldVisible(input)}},260);
  if(kind==='role')$('#fFile').onchange=()=>{const f=$('#fFile').files[0];if(f){const p=$('#fPreview');p.src=URL.createObjectURL(f);p.style.display='block'}};
  $('#saveForm').onclick=async()=>{const name=$('#fName').value.trim();if(!name)return toast('请输入名称');
   if(kind==='category')await put('categories',{id:uid(),name});
@@ -502,7 +570,7 @@ $('#drawBtn').onclick=async()=>{
  drawing=false;$('#drawBtn').disabled=false;
 };
 
-$('#historyTopBtn').onclick=()=>{const el=document.getElementById('history'); if(el)el.closest('.card')?.scrollIntoView({behavior:'smooth',block:'start'});};
+$('#historyTopBtn').onclick=()=>{renderHistory();openModal('historyModal')};
 $('#settingsTopBtn').onclick=()=>{if(!managementUnlocked)return showStartupPassword();openModal('settingsModal')};
 $('#clearHistory').onclick=async()=>{if(!state.history.length)return;if(!confirm('确定清空全部抽取记录吗？'))return;const all=await getAll('history');for(const x of all)await del('history',x.id);state.history=[];renderHistory();toast('记录已清空')}
 
