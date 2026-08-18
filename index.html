@@ -28,7 +28,7 @@
 html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Helvetica Neue",sans-serif;background:linear-gradient(180deg,#f7f3f8 0%,#eee8f2 100%);color:var(--ink)}
 button,input,select{font:inherit}
 button{cursor:pointer}
-.app{max-width:1100px;margin:0 auto;padding:12px 14px 126px}
+.app{max-width:1100px;margin:0 auto;padding:12px 14px calc(104px + env(safe-area-inset-bottom))}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
 .brand{display:flex;align-items:center;gap:10px}
 .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--purple),#c36ee0);color:white;display:grid;place-items:center;font-size:22px;box-shadow:0 8px 18px rgba(139,63,190,.25)}
@@ -36,7 +36,7 @@ button{cursor:pointer}
 .top-actions{display:flex;gap:8px}.icon-btn,.ghost-btn{border:1px solid var(--line);background:white;color:#111;border-radius:12px;padding:10px 13px;box-shadow:0 4px 12px rgba(60,30,80,.05)}
 .layout{display:block}
 .card{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.8);border-radius:24px;box-shadow:var(--shadow)}
-.draw-card{padding:16px;min-height:calc(100dvh - 190px);display:flex;flex-direction:column}
+.draw-card{padding:16px;min-height:calc(100dvh - 178px - env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
 .filter-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .filter-label{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap}
 .selector{flex:1;min-width:0;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
@@ -45,10 +45,14 @@ button{cursor:pointer}
 .badge{background:var(--purple3);color:var(--purple);padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700}
 .result-area{flex:1;display:grid;place-items:center;padding:18px 0}
 .result-grid{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;align-content:center}
-.result-empty{text-align:center;color:var(--muted);padding:70px 10px}.result-empty .big{font-size:52px;margin-bottom:8px}
+.result-empty{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:12px 10px;color:var(--muted)}
+.empty-card{position:relative;width:148px;height:210px;border-radius:22px;background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.18),transparent 28%),linear-gradient(145deg,#702aa0,#a34bc9 55%,#652494);border:5px solid rgba(255,255,255,.78);box-shadow:0 18px 36px rgba(93,39,118,.25),inset 0 0 0 2px rgba(255,255,255,.14);display:grid;place-items:center;overflow:hidden}
+.empty-card:before{content:"";position:absolute;inset:10px;border:2px solid rgba(255,255,255,.55);border-radius:15px}
+.empty-card:after{content:"?";position:relative;z-index:1;width:66px;height:66px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:46px;font-weight:900;background:rgba(255,255,255,.10);border:2px solid rgba(255,255,255,.55);box-shadow:0 0 0 7px rgba(255,255,255,.05)}
+.result-empty .empty-hint{font-size:13px}
 
 /* ===== 抽取动画：紫色问号卡牌 → 翻转 → 角色名 ===== */
-.draw-card .result-area{min-height:calc(100dvh - 330px);}
+.draw-card .result-area{min-height:0;flex:1;padding:12px 0 18px;overflow:auto;scrollbar-width:none}.draw-card .result-area::-webkit-scrollbar{display:none}
 .draw-result-stage{width:100%;display:flex;align-items:center;justify-content:center}
 .draw-result-grid{width:min(940px,100%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:22px}
 .flip-card{width:210px;height:300px;perspective:1200px}
@@ -78,8 +82,8 @@ button{cursor:pointer}
 .shake .role-card{animation:shake .11s linear infinite}
 @keyframes shake{0%{transform:translateX(-5px) rotate(-1deg)}50%{transform:translateX(5px) rotate(1deg)}100%{transform:translateX(-5px) rotate(-1deg)}}
 @keyframes pop{0%{transform:scale(.75);opacity:0}70%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
-.draw-card{padding-bottom:125px}
-.draw-actions{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:14px;align-items:center;justify-content:center;border-top:1px solid rgba(214,218,229,.95);padding:12px 22px calc(12px + env(safe-area-inset-bottom));background:rgba(248,250,255,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 -8px 28px rgba(70,75,100,.10)}
+.draw-card{padding-bottom:16px}
+.draw-actions{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:12px;align-items:center;justify-content:center;border-top:1px solid rgba(214,218,229,.95);padding:8px 18px calc(8px + env(safe-area-inset-bottom));min-height:78px;background:rgba(248,250,255,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 -8px 28px rgba(70,75,100,.10)}
 .draw-actions:before{content:"";position:absolute;left:50%;top:-1px;transform:translateX(-50%);width:min(900px,100%);height:1px;background:#d9deea;pointer-events:none}
 .primary{border:0;background:linear-gradient(180deg,#e51a76,#d90d69);color:#fff;border-radius:20px;padding:16px 42px;font-weight:900;font-size:22px;min-width:156px;min-height:62px;box-shadow:0 9px 0 #b90857,0 14px 24px rgba(217,13,105,.24);letter-spacing:1px}.primary:active{transform:translateY(3px);box-shadow:0 5px 0 #b90857,0 8px 16px rgba(217,13,105,.18)}
 .primary:disabled{opacity:.55}
@@ -91,13 +95,20 @@ button{cursor:pointer}
 .manage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.manage-btn{padding:12px;border:1px solid var(--line);background:#fff;border-radius:13px;text-align:left}.manage-btn b{display:block}.manage-btn span{font-size:11px;color:var(--muted)}
 .backup-row{display:flex;gap:8px}.backup-row button{flex:1}
 .footer-note{text-align:center;color:#9b92a0;font-size:11px;margin-top:16px}
-.overlay{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(39,25,45,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;box-sizing:border-box;padding:12px env(safe-area-inset-right) calc(12px + env(safe-area-inset-bottom)) env(safe-area-inset-left);overflow:hidden}.overlay.show{display:flex}
-#settingsModal,#passwordModal,#formModal,#dataModal,#filterModal,#historyModal{align-items:center !important;justify-content:center;padding:12px env(safe-area-inset-right) calc(12px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
-#settingsModal{z-index:120}#filterModal{z-index:130}#historyModal{z-index:135}#formModal,#dataModal{z-index:140}#passwordModal{z-index:150}
+.overlay{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(39,25,45,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;box-sizing:border-box;padding:12px env(safe-area-inset-right) calc(12px + env(safe-area-inset-bottom)) env(safe-area-inset-left);overflow:hidden;pointer-events:none;isolation:isolate}.overlay.show{display:flex;pointer-events:auto}
+#settingsModal,#passwordModal,#formModal,#dataModal,#filterModal,#historyModal{align-items:center !important;justify-content:center !important;padding:12px env(safe-area-inset-right) calc(12px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+/* 弹窗层级统一：二级管理弹窗永远压在设置和底部抽取栏之上，避免 iPad 横屏出现“弹窗在下一层” */
+#settingsModal{z-index:1200 !important}
+#filterModal{z-index:1300 !important}
+#historyModal{z-index:1350 !important}
+#formModal{z-index:3000 !important}
+#dataModal{z-index:3000 !important}
+#passwordModal{z-index:4000 !important}
+#formModal,#dataModal,#filterModal,#historyModal,#passwordModal,#settingsModal{position:fixed !important;inset:var(--vvtop,0px) 0 auto 0 !important;width:100% !important;height:var(--vvh,100dvh) !important;max-height:none !important}
 .modal{width:min(760px,100%);max-height:calc(var(--vvh, 100dvh) - 24px);background:#fff;border-radius:26px;padding:18px;display:flex;flex-direction:column;box-shadow:0 18px 60px rgba(40,20,50,.2);box-sizing:border-box;overflow:hidden}
 /* 二级弹窗必须盖在设置和底部抽取栏之上；弹窗内部独立滚动，iPad 横竖屏都可操作 */
 #passwordModal .modal,#settingsModal .modal,#formModal .modal,#dataModal .modal{border-radius:24px;max-height:calc(var(--vvh, 100dvh) - 24px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;box-shadow:0 18px 60px rgba(40,20,50,.22)}
-#formModal .modal,#dataModal .modal{width:min(560px,92vw)}
+#formModal .modal,#dataModal .modal{width:min(560px,92vw);position:relative;z-index:1}
 #dataModal{align-items:center !important;justify-content:center !important;overflow:hidden}
 #dataModal .modal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(620px,92vw);height:min(78dvh,calc(var(--vvh, 100dvh) - 24px),620px);max-height:calc(var(--vvh, 100dvh) - 24px);min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:16px;margin:0}
 #dataModal .modal-head{flex:0 0 auto}
@@ -131,10 +142,10 @@ button{cursor:pointer}
   .top-nav-btn{min-width:78px;padding:5px 8px;border-radius:11px}
   .top-nav-btn b{font-size:12px}.top-nav-btn small{font-size:9px;margin-top:1px}
   .top-nav-icon{width:20px;height:20px;border-radius:7px;font-size:11px}
-  .draw-card{min-height:calc(100dvh - 165px);padding:12px;border-radius:20px}
-  .draw-card .result-area{min-height:calc(100dvh - 300px);padding:8px 0}
-  .draw-result-grid{gap:16px}
-  .flip-card{width:190px;height:270px}
+  .draw-card{min-height:calc(100dvh - 142px - env(safe-area-inset-bottom));padding:12px;border-radius:20px;overflow:hidden}
+  .draw-card .result-area{min-height:0;flex:1;padding:6px 0 10px;overflow:auto}
+  .draw-result-grid{gap:14px;max-height:100%;overflow:auto;padding:4px 0}
+  .flip-card{width:176px;height:248px}
   .pool-modal{width:min(920px,94vw);height:min(620px,calc(100dvh - 18px));max-height:calc(var(--vvh, 100dvh) - 18px);padding:11px 14px 10px}
   .pool-top{padding-bottom:6px}.pool-top h3{font-size:18px}.pool-sub{font-size:10px;margin-top:3px}
   .pool-toolbar{margin-bottom:6px}.pool-search-wrap{height:34px}.pool-action{height:32px;padding:0 10px}
@@ -253,7 +264,25 @@ body.keyboard-open #historyModal .history-modal{max-height:calc(var(--vvh,100dvh
 @media(max-width:560px){.settings-grid,.settings-actions{grid-template-columns:1fr}}
 
 @media(max-width:800px){.layout{grid-template-columns:1fr}.draw-card{min-height:520px}.side{display:block}.side .card:last-child{grid-column:1/-1}}
-@media(max-width:560px){.app{padding:12px 12px 120px}.topbar{align-items:flex-start}.brand h1{font-size:18px}.header-strip{padding:8px 8px;border-radius:16px}.header-title{font-size:22px}.header-nav{gap:6px}.top-nav-btn{min-width:78px;padding:7px 9px}.top-nav-btn b{font-size:13px}.top-nav-btn small{font-size:9px}.top-actions .ghost-btn{padding:9px}.draw-card{padding:15px;border-radius:20px}.side{display:flex}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.primary{padding:14px 28px;min-width:132px;min-height:58px;font-size:20px}.draw-actions{gap:9px;padding-left:12px;padding-right:12px}.count-control{flex:0 0 auto}.filter-row{align-items:stretch}.selector{padding:10px 12px}.modal{padding:15px}.draw-actions{flex-wrap:wrap}}
+@media(max-width:560px){.app{padding:12px 12px calc(94px + env(safe-area-inset-bottom))}.topbar{align-items:flex-start}.brand h1{font-size:18px}.header-strip{padding:8px 8px;border-radius:16px}.header-title{font-size:22px}.header-nav{gap:6px}.top-nav-btn{min-width:78px;padding:7px 9px}.top-nav-btn b{font-size:13px}.top-nav-btn small{font-size:9px}.top-actions .ghost-btn{padding:9px}.draw-card{padding:15px;border-radius:20px}.side{display:flex}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.primary{padding:14px 28px;min-width:132px;min-height:58px;font-size:20px}.draw-actions{gap:9px;padding-left:12px;padding-right:12px}.count-control{flex:0 0 auto}.filter-row{align-items:stretch}.selector{padding:10px 12px}.modal{padding:15px}.draw-actions{flex-wrap:wrap}}
+
+/* ===== 主界面最终尺寸：抽取区与底部操作栏彻底分离 ===== */
+:root{--drawbar-space:86px}
+.draw-card{min-height:calc(100dvh - 178px - env(safe-area-inset-bottom));}
+.draw-card .result-area{min-height:0 !important;flex:1 1 auto !important;}
+.draw-actions{min-height:78px;}
+@media (orientation:landscape) and (max-height:820px){
+  :root{--drawbar-space:74px}
+  .app{padding-bottom:calc(var(--drawbar-space) + env(safe-area-inset-bottom));}
+  .draw-card{min-height:calc(100dvh - 140px - env(safe-area-inset-bottom));}
+  .draw-card .result-area{min-height:0 !important;flex:1 1 auto !important;}
+  .draw-actions{min-height:70px;padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom));}
+  .primary{min-height:54px;padding:12px 38px;}
+  .count-control button{height:40px}.count-control span{font-size:21px}.count-control{padding:4px 7px}
+}
+@media (orientation:portrait){
+  .draw-card{min-height:calc(100dvh - 190px - env(safe-area-inset-bottom));}
+}
 </style>
 </head>
 <body>
@@ -284,7 +313,7 @@ body.keyboard-open #historyModal .history-modal{max-height:calc(var(--vvh,100dvh
       </div>
       <div id="badges" class="badges"></div>
       <div class="result-area" id="resultArea">
-        <div class="result-empty"><div class="big">🎲</div><div>选择系列后开始抽取</div></div>
+        <div class="result-empty"><div class="empty-card" aria-hidden="true"></div><div class="empty-hint">选择系列后开始抽取</div></div>
       </div>
       <div class="draw-actions">
         <div class="count-control"><button id="minus">−</button><span id="count">1</span><button id="plus">＋</button></div>

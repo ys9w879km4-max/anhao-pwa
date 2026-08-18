@@ -1,4 +1,4 @@
-const CACHE = 'anhao-pwa-v6';
+const CACHE = 'anhao-pwa-v8';
 const ASSETS = [
   './',
   './index.html',
