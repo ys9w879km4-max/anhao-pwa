@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="theme-color" content="#7c3aed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="暗号">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#8b3fbe">
+<title>角色随机抽取器</title>
+<style>
+:root{
+  --purple:#8b3fbe; --purple2:#a95bd1; --purple3:#f4eafa;
+  --ink:#302a35; --muted:#8b8391; --line:#e8e1ec; --bg:#f5f1f7;
+  --card:#fff; --shadow:0 12px 32px rgba(83,45,105,.10);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Helvetica Neue",sans-serif;background:linear-gradient(180deg,#f7f3f8 0%,#eee8f2 100%);color:var(--ink)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1100px;margin:0 auto;padding:18px 18px 130px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--purple),#c36ee0);color:white;display:grid;place-items:center;font-size:22px;box-shadow:0 8px 18px rgba(139,63,190,.25)}
+.brand h1{font-size:20px;margin:0;font-weight:800}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+.top-actions{display:flex;gap:8px}.icon-btn,.ghost-btn{border:1px solid var(--line);background:white;color:#111;border-radius:12px;padding:10px 13px;box-shadow:0 4px 12px rgba(60,30,80,.05)}
+.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:16px}
+.card{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.8);border-radius:24px;box-shadow:var(--shadow)}
+.draw-card{padding:22px;min-height:610px;display:flex;flex-direction:column}
+.filter-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.filter-label{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap}
+.selector{flex:1;min-width:0;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
+.selector strong{display:block;font-size:15px}.selector small{color:var(--muted);display:block;margin-top:2px}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{background:var(--purple3);color:var(--purple);padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.result-area{flex:1;display:grid;place-items:center;padding:18px 0}
+.result-grid{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;align-content:center}
+.result-empty{text-align:center;color:var(--muted);padding:70px 10px}.result-empty .big{font-size:52px;margin-bottom:8px}
+
+/* ===== 抽取动画：紫色问号卡牌 → 翻转 → 角色名 ===== */
+.draw-card .result-area{min-height:390px}
+.draw-result-stage{width:100%;display:flex;align-items:center;justify-content:center}
+.draw-result-grid{width:min(820px,100%);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px}
+.flip-card{width:190px;height:270px;perspective:1200px}
+.flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.flip-card.back .flip-inner{transform:rotateY(0deg)}
+.flip-card.front .flip-inner{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;border-radius:24px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.flip-back{background:linear-gradient(145deg,#7b32ae 0%,#9b46c5 52%,#6e279f 100%);border:6px solid rgba(255,255,255,.72);box-shadow:0 18px 38px rgba(93,39,118,.28),inset 0 0 0 2px rgba(255,255,255,.15)}
+.flip-back:before{content:"";position:absolute;inset:11px;border:2px solid rgba(255,255,255,.55);border-radius:17px}
+.question-mark{position:relative;z-index:1;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:62px;font-weight:900;line-height:1;background:rgba(255,255,255,.10);border:2px solid rgba(255,255,255,.58);box-shadow:0 0 0 8px rgba(255,255,255,.05)}
+.flip-front{transform:rotateY(180deg);background:#fff;border:1px solid #e8deed;box-shadow:0 18px 38px rgba(75,43,94,.16);padding:20px}
+.result-name-only{font-size:28px;line-height:1.25;text-align:center;font-weight:900;color:#111;word-break:break-word}
+.flip-card.flip .flip-inner{animation:cardFlip 1.05s cubic-bezier(.2,.72,.25,1) forwards}
+@keyframes cardFlip{0%{transform:rotateY(0)}100%{transform:rotateY(180deg)}}
+.draw-countdown{font-size:13px;color:#8d8291;text-align:center;margin-top:14px;min-height:20px}
+.flip-back{background-image:radial-gradient(circle at 20% 15%,rgba(255,255,255,.18),transparent 28%),linear-gradient(145deg,#702aa0,#a34bc9 55%,#652494)}
+.flip-back:after{content:"";position:absolute;width:180%;height:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:rotate(-28deg) translateX(-70%);animation:cardShine 1.5s ease-in-out infinite}
+@keyframes cardShine{0%{transform:rotate(-28deg) translateX(-75%)}55%,100%{transform:rotate(-28deg) translateX(75%)}}
+.flip-card.flip{animation:cardPop .7s ease both}
+@keyframes cardPop{0%{transform:translateY(5px) scale(.97)}55%{transform:translateY(-7px) scale(1.03)}100%{transform:translateY(0) scale(1)}}
+@media(max-width:560px){
+  .flip-card{width:155px;height:220px}
+  .result-name-only{font-size:24px}
+}
+.role-card{background:linear-gradient(180deg,#fff,#faf7fc);border:1px solid #ece3f1;border-radius:20px;overflow:hidden;box-shadow:0 10px 24px rgba(80,45,100,.08);animation:pop .42s cubic-bezier(.2,.9,.2,1)}
+.role-img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#eee7f1;display:block}.role-info{padding:11px 12px}.role-name{font-weight:800;font-size:16px}.role-series{font-size:11px;color:var(--muted);margin-top:4px}
+.shake .role-card{animation:shake .11s linear infinite}
+@keyframes shake{0%{transform:translateX(-5px) rotate(-1deg)}50%{transform:translateX(5px) rotate(1deg)}100%{transform:translateX(-5px) rotate(-1deg)}}
+@keyframes pop{0%{transform:scale(.75);opacity:0}70%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+.draw-card{padding-bottom:125px}
+.draw-actions{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:14px;align-items:center;justify-content:center;border-top:1px solid rgba(214,218,229,.95);padding:12px 22px calc(12px + env(safe-area-inset-bottom));background:rgba(248,250,255,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 -8px 28px rgba(70,75,100,.10)}
+.draw-actions:before{content:"";position:absolute;left:50%;top:-1px;transform:translateX(-50%);width:min(900px,100%);height:1px;background:#d9deea;pointer-events:none}
+.primary{border:0;background:linear-gradient(180deg,#e51a76,#d90d69);color:#fff;border-radius:20px;padding:16px 42px;font-weight:900;font-size:22px;min-width:156px;min-height:62px;box-shadow:0 9px 0 #b90857,0 14px 24px rgba(217,13,105,.24);letter-spacing:1px}.primary:active{transform:translateY(3px);box-shadow:0 5px 0 #b90857,0 8px 16px rgba(217,13,105,.18)}
+.primary:disabled{opacity:.55}
+.count-control{display:flex;align-items:center;gap:6px;border:1px solid #cbd2df;background:#f4f6fb;border-radius:18px;padding:5px 8px;box-shadow:0 2px 8px rgba(50,60,80,.04)}
+.count-control button{width:42px;height:46px;border:0;border-radius:13px;background:transparent;color:#111;font-size:24px;font-weight:800}.count-control span{min-width:50px;text-align:center;font-weight:900;font-size:24px;color:#111}
+.side{display:flex;flex-direction:column;gap:16px}.side .card{padding:18px}
+.card-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.card-title h2{font-size:16px;margin:0}.card-title small{color:var(--muted)}
+.history{max-height:410px;overflow:auto}.history-item{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid #eee9f0}.history-thumb{width:40px;height:40px;border-radius:10px;object-fit:cover;background:#eee7f1}.history-main{min-width:0;flex:1}.history-name{font-weight:700;font-size:14px}.history-meta{font-size:11px;color:var(--muted);margin-top:3px}.history-time{font-size:11px;color:#aaa}
+.manage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.manage-btn{padding:12px;border:1px solid var(--line);background:#fff;border-radius:13px;text-align:left}.manage-btn b{display:block}.manage-btn span{font-size:11px;color:var(--muted)}
+.backup-row{display:flex;gap:8px}.backup-row button{flex:1}
+.footer-note{text-align:center;color:#9b92a0;font-size:11px;margin-top:16px}
+.overlay{position:fixed;inset:0;background:rgba(39,25,45,.35);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:20}.overlay.show{display:flex}
+.modal{width:min(760px,100%);max-height:90vh;background:#fff;border-radius:26px 26px 0 0;padding:18px;display:flex;flex-direction:column;box-shadow:0 -20px 50px rgba(40,20,50,.2)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.modal-head h3{margin:0;font-size:19px}.close{border:0;background:#f4eff6;border-radius:50%;width:36px;height:36px}
+.search{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px 14px;outline:none;margin-bottom:12px}.search:focus{border-color:#c79bd8;box-shadow:0 0 0 3px #f3e8f7}
+.tree{overflow:auto;padding:2px 0 12px}.cat{border:1px solid #eee7f1;border-radius:16px;margin-bottom:9px;overflow:hidden}.cat-head,.series-head{display:flex;align-items:center;gap:10px;padding:12px 13px}.cat-head{background:#fbf9fc}.series-list{padding:0 10px 10px}.series{border-top:1px solid #f0ebf2}.series-head{padding:10px 3px}.series-name{flex:1;font-weight:700}.qty{color:var(--muted);font-size:12px}.check{width:20px;height:20px;accent-color:var(--purple);flex:0 0 auto}.select-actions{display:flex;gap:8px;margin-left:auto}.mini{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 9px;font-size:11px;color:#111}
+.modal-foot{border-top:1px solid #eee8f0;padding-top:12px;display:flex;gap:9px}.modal-foot button{flex:1}.secondary{border:1px solid var(--line);background:#fff;border-radius:13px;padding:13px}.purple{border:0;background:var(--purple);color:#fff;border-radius:13px;padding:13px;font-weight:800}
+.form{display:grid;gap:10px}.form input,.form select{border:1px solid var(--line);border-radius:13px;padding:12px}.file-label{border:1px dashed #cdb5d8;border-radius:15px;padding:16px;text-align:center;background:#faf6fc;color:#111}.file-label input{display:none}.preview{width:90px;height:90px;border-radius:14px;object-fit:cover;display:none;margin:auto}.list-scroll{max-height:45vh;overflow:auto}.row{display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee8f0;padding:10px 0}.row-main{flex:1;min-width:0}.row-main b{display:block}.row-main small{color:var(--muted)}.danger{border:0;background:#fff0f1;color:#c04d59;border-radius:10px;padding:8px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:#302a35;color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;z-index:50;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== 顶部：暗号 + 卡池 ===== */
+.header-strip{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(135deg,#ead8f2 0%,#f3e9f6 100%);border:1px solid rgba(139,63,190,.10);border-radius:18px;padding:10px 12px;box-shadow:0 7px 18px rgba(80,45,100,.07)}
+.header-title{font-size:24px;font-weight:900;letter-spacing:1px;color:#111;flex:1;padding-left:7px}
+.header-nav{display:flex;align-items:center;gap:8px}
+.top-nav-btn{min-width:88px;border:1px solid #cbd2df;background:#f4f6fb;border-radius:16px;padding:8px 13px;display:flex;align-items:center;justify-content:center;gap:7px;text-align:left;color:#111;box-shadow:0 3px 10px rgba(50,60,80,.06)}
+.top-nav-btn.active{background:#fff;border-color:#8b3fbe;box-shadow:0 4px 12px rgba(139,63,190,.10)}
+.top-nav-btn b{display:block;font-size:14px;line-height:1.1}.top-nav-btn small{display:block;margin-top:3px;color:#666;font-size:10px;white-space:nowrap}.top-nav-icon{width:26px;height:26px;border-radius:8px;background:#8b3fbe;color:#fff;display:grid;place-items:center;font-size:13px}
+.pool-header-btn{min-width:220px;border:1px solid rgba(139,63,190,.16);background:rgba(255,255,255,.82);border-radius:14px;padding:9px 12px;display:flex;align-items:center;gap:9px;text-align:left;color:#111;box-shadow:0 4px 12px rgba(80,45,100,.05)}
+.pool-header-icon{width:34px;height:34px;border-radius:10px;background:#8b3fbe;color:#fff;display:grid;place-items:center;font-size:16px}
+.pool-header-btn span:nth-child(2){min-width:0;flex:1}.pool-header-btn b{display:block;font-size:14px;color:#111}.pool-header-btn small{display:block;margin-top:2px;color:#111;font-size:10px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pool-header-arrow{font-size:18px;color:#111}
+.topbar{margin-bottom:16px}
+.filter-row{margin:0!important}
+.badges{margin-bottom:2px}
+/* ===== 暗号版头部与密码锁 ===== */
+.brand h1{font-size:25px;letter-spacing:1px}
+.password-modal{max-width:430px}
+/* ===== 卡池选择器升级版 ===== */
+.pool-modal{width:min(900px,100%);max-height:92vh;background:linear-gradient(180deg,#fff 0%,#fbf8fd 100%);border-radius:30px 30px 0 0;padding:20px 20px 14px;display:flex;flex-direction:column;box-shadow:0 -24px 70px rgba(56,25,73,.25);border:1px solid rgba(255,255,255,.9)}
+.pool-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:2px 2px 15px}
+.pool-kicker{font-size:10px;letter-spacing:2.2px;color:#a57ab5;font-weight:900;margin-bottom:4px}
+.pool-top h3{font-size:24px;margin:0;color:#2d2532;letter-spacing:-.5px}
+.pool-sub{font-size:12px;color:#918696;margin-top:5px}
+.pool-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:13px}
+.pool-search-wrap{height:44px;flex:1;display:flex;align-items:center;gap:7px;background:#f5f0f7;border:1px solid #ebe2ef;border-radius:14px;padding:0 12px;color:#9a8ca0}
+.pool-search-wrap input{width:100%;border:0;outline:0;background:transparent;color:#403746;font-size:14px}
+.pool-action{height:40px;border:1px solid #e4d9e8;background:#fff;color:#111;border-radius:12px;padding:0 12px;font-size:12px;font-weight:700}
+.pool-action:active{transform:scale(.97)}
+.pool-body{overflow:auto;padding:1px 2px 12px;min-height:180px;max-height:54vh}
+.pool-category{margin-bottom:12px}
+.pool-category-head{display:flex;align-items:center;gap:9px;padding:4px 3px 8px}
+.pool-category-head b{font-size:14px}
+.pool-category-head .cat-count{margin-left:auto;color:#9b90a1;font-size:11px}
+.pool-series-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.pool-series-card{position:relative;min-height:78px;border:1.5px solid #e8dfeb;border-radius:17px;background:#fff;padding:11px 12px;display:flex;align-items:center;gap:10px;overflow:hidden;transition:.18s;box-shadow:0 4px 12px rgba(80,45,100,.035)}
+.pool-series-card:active{transform:scale(.985)}
+.pool-series-card.selected{border-color:#a052c3;background:linear-gradient(135deg,#fbf4ff,#f5e9fa);box-shadow:0 7px 18px rgba(139,63,190,.12)}
+.pool-series-card.selected:after{content:"✓";position:absolute;right:10px;top:9px;width:21px;height:21px;border-radius:50%;background:#8b3fbe;color:white;display:grid;place-items:center;font-size:12px;font-weight:900}
+.pool-series-card .pool-icon{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#eee2f3,#d9c2e2);display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.pool-series-card.selected .pool-icon{background:linear-gradient(135deg,#e6c9ef,#c88ddd)}
+.pool-series-main{min-width:0;padding-right:20px}
+.pool-series-name{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pool-series-meta{font-size:11px;color:#978b9d;margin-top:4px}
+.pool-series-check{position:absolute;opacity:0;pointer-events:none}
+.pool-empty{padding:42px 10px;text-align:center;color:#a39aa7}
+.pool-bottom{border-top:1px solid #ece6ee;padding-top:12px;display:flex;align-items:center;gap:12px}
+.pool-selected{display:flex;align-items:center;gap:6px;font-size:12px;color:#8b8190;min-width:0}
+.pool-selected b{color:#493c50;font-size:13px}
+.pool-selected i{height:15px;width:1px;background:#ddd3e0;margin:0 3px}
+.selected-dot{width:8px;height:8px;border-radius:50%;background:#9b50bf;box-shadow:0 0 0 4px #f0dff5}
+.pool-confirm{margin-left:auto;border:0;background:linear-gradient(135deg,#8b3fbe,#aa56ca);color:#fff;border-radius:14px;padding:13px 25px;font-weight:800;box-shadow:0 8px 18px rgba(139,63,190,.22)}
+@media(max-width:560px){
+  .pool-modal{padding:17px 13px 12px;border-radius:25px 25px 0 0}
+  .pool-top h3{font-size:21px}
+  .pool-toolbar{flex-wrap:wrap}
+  .pool-search-wrap{min-width:100%}
+  .pool-action{flex:1}
+  .pool-series-grid{grid-template-columns:1fr}
+  .pool-series-card{min-height:70px}
+  .pool-bottom{align-items:stretch;flex-direction:column}
+  .pool-selected{justify-content:center}
+  .pool-confirm{margin-left:0;width:100%}
+}
+
+/* ===== 设置面板 ===== */
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.settings-section{padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.7)}
+.settings-section h4{margin:0 0 4px;font-size:14px}
+.settings-section p{margin:0 0 11px;color:var(--muted);font-size:11px;line-height:1.6}
+.settings-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.settings-actions .manage-btn{min-height:64px}
+.settings-divider{height:1px;background:var(--line);margin:14px 0}
+.settings-note{font-size:11px;color:var(--muted);line-height:1.7}
+@media(max-width:560px){.settings-grid,.settings-actions{grid-template-columns:1fr}}
+
+@media(max-width:800px){.layout{grid-template-columns:1fr}.draw-card{min-height:520px}.side{display:block}.side .card:last-child{grid-column:1/-1}}
+@media(max-width:560px){.app{padding:12px 12px 120px}.topbar{align-items:flex-start}.brand h1{font-size:18px}.header-strip{padding:8px 8px;border-radius:16px}.header-title{font-size:22px}.header-nav{gap:6px}.top-nav-btn{min-width:78px;padding:7px 9px}.top-nav-btn b{font-size:13px}.top-nav-btn small{font-size:9px}.top-actions .ghost-btn{padding:9px}.draw-card{padding:15px;border-radius:20px}.side{display:flex}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.primary{padding:14px 28px;min-width:132px;min-height:58px;font-size:20px}.draw-actions{gap:9px;padding-left:12px;padding-right:12px}.count-control{flex:0 0 auto}.filter-row{align-items:stretch}.selector{padding:10px 12px}.modal{padding:15px}.draw-actions{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="header-strip">
+      <div class="header-title">暗号</div>
+      <div class="header-nav">
+        <button class="top-nav-btn active" id="filterBtn">
+          <span class="top-nav-icon">▣</span>
+          <span><b>卡池</b><small id="filterSub">全部系列</small></span>
+        </button>
+        <button class="top-nav-btn" id="historyTopBtn">
+          <span><b>历史</b><small id="historyTopCount">0 次</small></span>
+        </button>
+        <button class="top-nav-btn" id="settingsTopBtn">
+          <span class="top-nav-icon">⚙</span>
+          <span><b>设置</b><small>管理与保存</small></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card draw-card">
+      <div class="filter-row" style="display:none">
+        <button class="selector" id="legacyFilterBtn"><span><strong id="filterTitle">全部系列</strong><small id="legacyFilterSub">点击选择，可多选系列</small></span><span>⌄</span></button>
+      </div>
+      <div id="badges" class="badges"></div>
+      <div class="result-area" id="resultArea">
+        <div class="result-empty"><div class="big">🎲</div><div>选择系列后开始抽取</div></div>
+      </div>
+      <div class="draw-actions">
+        <div class="count-control"><button id="minus">−</button><span id="count">1</span><button id="plus">＋</button></div>
+        <button class="primary" id="drawBtn">抽</button>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="card">
+        <div class="card-title"><h2>📜 抽取历史</h2><small id="historyCount">0 条</small></div>
+        <div class="history" id="history"></div>
+        <button class="secondary" style="width:100%;margin-top:10px" id="clearHistory">清空记录</button>
+      </section>
+    </aside>
+  </main>
+  <div class="footer-note">适配 iPad / iPhone / 桌面浏览器 · 可添加到主屏幕使用</div>
+</div>
+
+<div class="overlay" id="passwordModal">
+  <div class="modal password-modal">
+    <div class="modal-head"><div><div class="pool-kicker">PRIVATE</div><h3>进入暗号</h3></div></div>
+    <div style="font-size:12px;color:#918696;margin:-4px 0 12px">首次进入请设置密码；以后每次打开网页时输入一次即可。</div>
+    <div class="form"><input id="passwordInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="off" placeholder="请输入 4～12 位数字密码"><div id="passwordHint" style="font-size:11px;color:#9b90a1"></div>
+      <div class="modal-foot"><button class="purple" id="passwordSubmit">进入暗号</button></div>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="filterModal">
+  <div class="pool-modal">
+    <div class="pool-top">
+      <div>
+        <div class="pool-kicker">CHARACTER POOL</div>
+        <h3>选择抽取卡池</h3>
+        <div class="pool-sub" id="poolSummary">未选择系列 · 将从全部角色中抽取</div>
+      </div>
+      <button class="close" data-close="filterModal">×</button>
+    </div>
+    <div class="pool-toolbar">
+      <div class="pool-search-wrap"><span>⌕</span><input id="filterSearch" placeholder="搜索分类或系列…"></div>
+      <button class="pool-action" id="selectAllSeries">全选</button>
+      <button class="pool-action" id="clearSeries">清空</button>
+    </div>
+    <div class="pool-body" id="filterTree"></div>
+    <div class="pool-bottom">
+      <div class="pool-selected"><span class="selected-dot"></span><b id="selectedPoolCount">0</b><span>个系列</span><i></i><b id="selectedRoleCount">全部</b><span>款角色</span></div>
+      <button class="pool-confirm" id="applyFilter">应用卡池</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="formModal">
+  <div class="modal">
+    <div class="modal-head"><h3 id="formTitle">添加角色</h3><button class="close" data-close="formModal">×</button></div>
+    <div id="formBody"></div>
+  </div>
+</div>
+
+<div class="overlay" id="settingsModal">
+  <div class="modal settings-modal">
+    <div class="modal-head"><div><div class="pool-kicker">SETTINGS</div><h3>设置</h3></div><button class="close" data-close="settingsModal">×</button></div>
+    <div class="settings-grid">
+      <section class="settings-section">
+        <h4>🗂️ 角色管理</h4>
+        <p>管理分类、系列和角色。添加角色时会自动压缩图片，减少本地存储占用。</p>
+        <div class="settings-actions">
+          <button class="manage-btn" id="addCategory"><b>＋ 新建分类</b><span>例如：游戏、动画</span></button>
+          <button class="manage-btn" id="addSeries"><b>＋ 新建系列</b><span>例如：原神、宝可梦</span></button>
+          <button class="manage-btn" id="addRole"><b>＋ 添加角色</b><span>上传图片和名字</span></button>
+          <button class="manage-btn" id="viewData"><b>☷ 管理已有数据</b><span>查看 / 删除</span></button>
+        </div>
+      </section>
+      <section class="settings-section">
+        <h4>💾 本地保存</h4>
+        <p>角色、图片、分类、系列和抽取历史保存在本设备浏览器中。建议定期导出完整备份。</p>
+        <div class="settings-actions">
+          <button class="manage-btn" id="exportBtn"><b>↓ 导出完整备份</b><span>包含角色图片和历史</span></button>
+          <button class="manage-btn" id="importBtn"><b>↑ 恢复备份</b><span>从 JSON 恢复数据</span></button>
+        </div>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </section>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-actions">
+      <button class="manage-btn" id="lockManagement"><b>🔒 锁定</b><span>重新输入密码</span></button>
+      <button class="manage-btn" id="changePassword"><b>⚿ 修改密码</b><span>更换暗号密码</span></button>
+    </div>
+    <div class="settings-note" style="margin-top:12px">提示：锁定后不会关闭网页，只会再次要求输入密码。数据仍保存在本设备浏览器中。</div>
+  </div>
+</div>
+<div class="overlay" id="dataModal">
+  <div class="modal">
+    <div class="modal-head"><h3>数据管理</h3><button class="close" data-close="dataModal">×</button></div>
+    <div id="dataBody" class="list-scroll"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DB='CharacterPickerDB', VER=1;
+let db, state={categories:[],series:[],roles:[],history:[]};
+let selectedSeries=new Set(), draftSeries=new Set(), drawCount=1, drawing=false;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+function toast(t){const x=$('#toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
+function openModal(id){$('#'+id).classList.add('show')} function closeModal(id){$('#'+id).classList.remove('show')}
+document.addEventListener('click',e=>{const c=e.target.closest('[data-close]');if(c)closeModal(c.dataset.close)});
+
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB,VER);r.onupgradeneeded=()=>{const d=r.result;['categories','series','roles','history'].forEach(n=>{if(!d.objectStoreNames.contains(n))d.createObjectStore(n,{keyPath:'id'})})};r.onsuccess=()=>{db=r.result;res()};r.onerror=()=>rej(r.error)})}
+function tx(store,mode='readonly'){return db.transaction(store,mode).objectStore(store)}
+function getAll(store){return new Promise((res,rej)=>{const r=tx(store).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function put(store,obj){return new Promise((res,rej)=>{const r=tx(store,'readwrite').put(obj);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+function del(store,id){return new Promise((res,rej)=>{const r=tx(store,'readwrite').delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+async function load(){state.categories=await getAll('categories');state.series=await getAll('series');state.roles=await getAll('roles');state.history=(await getAll('history')).sort((a,b)=>b.time-a.time);renderAll()}
+async function saveBlobImage(file){
+  if((file.type||'').startsWith('image/')){try{const b=await createImageBitmap(file),m=1200,s=Math.min(1,m/Math.max(b.width,b.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(b.width*s));c.height=Math.max(1,Math.round(b.height*s));c.getContext('2d').drawImage(b,0,0,c.width,c.height);const x=await new Promise(r=>c.toBlob(r,'image/webp',.82));if(x)return await x.arrayBuffer()}catch(e){}}
+  return await file.arrayBuffer();
+}
+function imageUrl(role){return role.image?URL.createObjectURL(new Blob([role.image],{type:role.mime||'image/jpeg'})):''}
+
+function renderAll(){renderHistory();renderFilterSummary();renderData()}
+function renderHistory(){const h=$('#history');$('#historyCount').textContent=state.history.length+' 条';if($('#historyTopCount'))$('#historyTopCount').textContent=state.history.length+' 次'; if(!state.history.length){h.innerHTML='<div style="padding:35px 5px;text-align:center;color:#aaa">还没有抽取记录</div>';return}
+ h.innerHTML=state.history.slice(0,80).map(x=>{const role=state.roles.find(r=>r.id===x.roleId);const s=state.series.find(s=>s.id===x.seriesId);const t=new Date(x.time);return `<div class="history-item">${role?.image?`<img class="history-thumb" src="${imageUrl(role)}">`:'<div class="history-thumb"></div>'}<div class="history-main"><div class="history-name">${esc(x.name)}</div><div class="history-meta">${esc(s?.name||'未知系列')} · ${esc(x.categoryName||'')}</div></div><div class="history-time">${t.toLocaleTimeString('zh-CN',{hour12:false})}</div></div>`}).join('')
+}
+function renderFilterSummary(){const arr=[...selectedSeries];const names=arr.map(id=>state.series.find(s=>s.id===id)?.name).filter(Boolean);if($('#filterTitle'))$('#filterTitle').textContent=names.length?`${names.length} 个系列`:'全部系列';if($('#filterSub'))$('#filterSub').textContent=names.length?`已选 ${names.length} 个系列 · ${countRoles(arr)} 款角色`:'全部系列 · 点击选择';$('#badges').innerHTML=names.slice(0,6).map(n=>`<span class="badge">${esc(n)}</span>`).join('')+(names.length>6?`<span class="badge">+${names.length-6}</span>`:'')}
+function countRoles(ids){return state.roles.filter(r=>ids.includes(r.seriesId)).length}
+
+function categoryName(id){return state.categories.find(c=>c.id===id)?.name||'未分类'}
+function seriesByCat(){return state.categories.map(c=>({c,ss:state.series.filter(s=>s.categoryId===c.id)}))}
+function renderFilterTree(){
+ const q=$('#filterSearch').value.trim().toLowerCase();
+ const cats=seriesByCat().map(({c,ss})=>{
+   const visible=ss.filter(s=>!q||c.name.toLowerCase().includes(q)||s.name.toLowerCase().includes(q));
+   if(!visible.length)return '';
+   const total=visible.reduce((n,s)=>n+state.roles.filter(r=>r.seriesId===s.id).length,0);
+   return `<div class="pool-category">
+     <div class="pool-category-head">
+       <span>📁</span><b>${esc(c.name)}</b><span class="cat-count">${visible.length} 个系列 · ${total} 款</span>
+     </div>
+     <div class="pool-series-grid">
+       ${visible.map(s=>{
+         const n=state.roles.filter(r=>r.seriesId===s.id).length;
+         const selected=draftSeries.has(s.id);
+         return `<label class="pool-series-card ${selected?'selected':''}">
+           <input class="pool-series-check" type="checkbox" data-series="${s.id}" ${selected?'checked':''}>
+           <div class="pool-icon">🎴</div>
+           <div class="pool-series-main"><div class="pool-series-name">${esc(s.name)}</div><div class="pool-series-meta">${n} 款角色 · ${esc(c.name)}</div></div>
+         </label>`;
+       }).join('')}
+     </div>
+   </div>`;
+ }).join('');
+ $('#filterTree').innerHTML=cats||'<div class="pool-empty">没有找到匹配的系列<br><small>试试换一个关键词</small></div>';
+ updatePoolSummary();
+}
+function updatePoolSummary(){
+ const ids=[...draftSeries], roleN=ids.reduce((n,id)=>n+state.roles.filter(r=>r.seriesId===id).length,0);
+ $('#selectedPoolCount').textContent=ids.length;
+ $('#selectedRoleCount').textContent=ids.length?roleN:'全部';
+ $('#poolSummary').textContent=ids.length?`已选择 ${ids.length} 个系列 · 共 ${roleN} 款角色`:'未选择系列 · 将从全部角色中抽取';
+}
+function showFilter(){draftSeries=new Set(selectedSeries);$('#filterSearch').value='';renderFilterTree();openModal('filterModal')}
+$('#filterBtn').onclick=showFilter;
+$('#filterSearch').oninput=renderFilterTree;
+$('#filterTree').onclick=e=>{
+ const card=e.target.closest('.pool-series-card');
+ if(!card)return;
+ const input=card.querySelector('[data-series]');
+ if(e.target!==input)input.checked=!input.checked;
+ input.checked?draftSeries.add(input.dataset.series):draftSeries.delete(input.dataset.series);
+ renderFilterTree();
+}
+$('#selectAllSeries').onclick=()=>{state.series.forEach(s=>draftSeries.add(s.id));renderFilterTree()}
+$('#clearSeries').onclick=()=>{draftSeries.clear();renderFilterTree()}
+$('#applyFilter').onclick=()=>{selectedSeries=new Set(draftSeries);closeModal('filterModal');renderFilterSummary();toast(selectedSeries.size?`已应用 ${selectedSeries.size} 个系列`:'已切换为全部系列')}
+
+function renderData(){
+ const body=$('#dataBody');
+ body.innerHTML=seriesByCat().map(({c,ss})=>`<div style="margin-bottom:18px"><div style="font-weight:800;margin-bottom:6px">📁 ${esc(c.name)} <span style="font-size:11px;color:#999">${ss.length} 个系列</span></div>${ss.map(s=>`<div class="row"><div class="row-main"><b>${esc(s.name)}</b><small>${state.roles.filter(r=>r.seriesId===s.id).length} 款角色</small></div><button class="danger" data-del-series="${s.id}">删除</button></div>`).join('')}</div>`).join('')||'<div style="padding:35px;text-align:center;color:#aaa">还没有数据，先添加分类和系列吧</div>';
+}
+let managementUnlocked=false;
+function openManagement(){if(!managementUnlocked){showStartupPassword();return}openModal('settingsModal')}
+async function passwordHash(v){const data=new TextEncoder().encode(v);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+function showStartupPassword(){$('#passwordInput').value='';const has=!!localStorage.getItem('characterPickerPassword');$('#passwordHint').textContent=has?'请输入暗号密码后进入。':'首次使用请设置一个 4～12 位数字密码。';$('#passwordSubmit').textContent=has?'进入暗号':'设置密码并进入暗号';openModal('passwordModal');setTimeout(()=>$('#passwordInput').focus(),80)}
+$('#passwordSubmit').onclick=async()=>{const value=$('#passwordInput').value.trim();if(!/^\d{4,12}$/.test(value))return toast('请输入 4～12 位数字密码');const stored=localStorage.getItem('characterPickerPassword');const hashed=await passwordHash(value);if(!stored)localStorage.setItem('characterPickerPassword',hashed);else if(stored!==hashed)return toast('密码不正确');managementUnlocked=true;closeModal('passwordModal');toast('欢迎进入暗号')};
+$('#passwordInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('#passwordSubmit').click()});
+$('#viewData').onclick=()=>{if(!managementUnlocked)return showStartupPassword();renderData();openModal('dataModal')};
+$('#lockManagement').onclick=()=>{managementUnlocked=false;closeModal('settingsModal');showStartupPassword()};
+$('#changePassword').onclick=async()=>{if(!managementUnlocked)return showStartupPassword();const v=prompt('请输入新的 4～12 位数字密码');if(!v)return;if(!/^\d{4,12}$/.test(v))return toast('请输入 4～12 位数字密码');localStorage.setItem('characterPickerPassword',await passwordHash(v));toast('密码已修改')};
+$('#addCategory').onclick=()=>{if(!managementUnlocked)return openManagement();form('category')};
+$('#addSeries').onclick=()=>{if(!managementUnlocked)return openManagement();if(!state.categories.length)return toast('请先创建分类');form('series')};
+$('#addRole').onclick=()=>{if(!managementUnlocked)return openManagement();if(!state.series.length)return toast('请先创建系列');form('role')};
+function form(kind){
+ $('#formTitle').textContent=kind==='role'?'添加角色':kind==='series'?'添加系列':'添加分类';
+ let body='';
+ if(kind==='category') body=`<div class="form"><input id="fName" placeholder="分类名称，例如：游戏"><div class="modal-foot"><button class="secondary" data-close="formModal">取消</button><button class="purple" id="saveForm">保存</button></div></div>`;
+ if(kind==='series') body=`<div class="form"><input id="fName" placeholder="系列名称，例如：原神"><select id="fCat">${state.categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select><div class="modal-foot"><button class="secondary" data-close="formModal">取消</button><button class="purple" id="saveForm">保存</button></div></div>`;
+ if(kind==='role') body=`<div class="form"><input id="fName" placeholder="角色名称"><select id="fSeries">${state.series.map(s=>`<option value="${s.id}">${esc(categoryName(s.categoryId))} · ${esc(s.name)}</option>`).join('')}</select><label class="file-label">点击上传角色图片<input id="fFile" type="file" accept="image/*"></label><img id="fPreview" class="preview"><div class="modal-foot"><button class="secondary" data-close="formModal">取消</button><button class="purple" id="saveForm">保存</button></div></div>`;
+ $('#formBody').innerHTML=body;openModal('formModal');
+ if(kind==='role')$('#fFile').onchange=()=>{const f=$('#fFile').files[0];if(f){const p=$('#fPreview');p.src=URL.createObjectURL(f);p.style.display='block'}};
+ $('#saveForm').onclick=async()=>{const name=$('#fName').value.trim();if(!name)return toast('请输入名称');
+  if(kind==='category')await put('categories',{id:uid(),name});
+  if(kind==='series'){if(!state.categories.length)return toast('请先创建分类');await put('series',{id:uid(),name,categoryId:$('#fCat').value})}
+  if(kind==='role'){if(!state.series.length)return toast('请先创建系列');const f=$('#fFile').files[0];if(!f)return toast('请上传图片');await put('roles',{id:uid(),name,seriesId:$('#fSeries').value,image:await saveBlobImage(f),mime:f.type})}
+  closeModal('formModal');await load();toast('保存成功');
+ }
+}
+
+$('#minus').onclick=()=>{drawCount=Math.max(1,drawCount-1);$('#count').textContent=drawCount}
+$('#plus').onclick=()=>{drawCount=Math.min(12,drawCount+1);$('#count').textContent=drawCount}
+
+function candidates(){const ids=[...selectedSeries];return ids.length?state.roles.filter(r=>ids.includes(r.seriesId)):state.roles}
+function renderBackCards(n){
+ const area=$('#resultArea');
+ area.innerHTML=`<div class="draw-result-stage"><div class="draw-result-grid">${Array.from({length:n},(_,i)=>`
+   <div class="flip-card back" data-flip-index="${i}">
+     <div class="flip-inner">
+       <div class="flip-face flip-back"><div class="question-mark">?</div></div>
+       <div class="flip-face flip-front"><div class="result-name-only"></div></div>
+     </div>
+   </div>`).join('')}</div></div><div class="draw-countdown">准备揭晓…</div>`;
+}
+function revealCards(roles){
+ const cards=[...document.querySelectorAll('.flip-card')];
+ roles.forEach((r,i)=>{
+   const card=cards[i]; if(!card)return;
+   card.querySelector('.result-name-only').textContent=r.name;
+   setTimeout(()=>card.classList.add('flip'),i*180);
+ });
+}
+function renderFinalNames(roles){
+ const area=$('#resultArea');
+ area.innerHTML=`<div class="draw-result-stage"><div class="draw-result-grid">${roles.map(r=>`
+   <div class="flip-card front"><div class="flip-inner" style="transform:rotateY(180deg)">
+     <div class="flip-face flip-back"><div class="question-mark">?</div></div>
+     <div class="flip-face flip-front"><div class="result-name-only">${esc(r.name)}</div></div>
+   </div></div>`).join('')}</div></div>`;
+}
+$('#drawBtn').onclick=async()=>{
+ if(drawing)return;
+ const pool=candidates();
+ if(!pool.length)return toast('当前范围没有角色');
+
+ drawing=true;$('#drawBtn').disabled=true;
+
+ // 先决定最终结果，但画面暂时只显示紫色问号卡牌。
+ const chosen=[];
+ const copy=[...pool];
+ for(let i=0;i<Math.min(drawCount,copy.length);i++){
+   const j=Math.floor(Math.random()*copy.length);
+   chosen.push(copy.splice(j,1)[0]);
+ }
+
+ // 阶段 1：背面停顿 1 秒
+ renderBackCards(chosen.length);
+ const countdown=$('.draw-countdown');
+ countdown.textContent='抽取中…';
+ await new Promise(r=>setTimeout(r,1000));
+
+ // 阶段 2：在约 3 秒内完成翻面揭晓
+ countdown.textContent='揭晓…';
+ revealCards(chosen);
+ await new Promise(r=>setTimeout(r,Math.max(3000,chosen.length*180+1100)));
+
+ // 保持正面，只显示角色名
+ renderFinalNames(chosen);
+
+ const batchId=uid();
+ for(const r of chosen){
+   const s=state.series.find(s=>s.id===r.seriesId);
+   const c=state.categories.find(c=>c.id===s?.categoryId);
+   await put('history',{id:uid(),batchId,roleId:r.id,seriesId:r.seriesId,name:r.name,categoryName:c?.name||'',time:Date.now()});
+ }
+ state.history=await getAll('history');
+ state.history.sort((a,b)=>b.time-a.time);
+ renderHistory();
+ drawing=false;$('#drawBtn').disabled=false;
+};
+
+$('#historyTopBtn').onclick=()=>{const el=document.getElementById('history'); if(el)el.closest('.card')?.scrollIntoView({behavior:'smooth',block:'start'});};
+$('#settingsTopBtn').onclick=()=>{if(!managementUnlocked)return showStartupPassword();openModal('settingsModal')};
+$('#clearHistory').onclick=async()=>{if(!state.history.length)return;if(!confirm('确定清空全部抽取记录吗？'))return;const all=await getAll('history');for(const x of all)await del('history',x.id);state.history=[];renderHistory();toast('记录已清空')}
+
+function bufferToBase64(buffer){
+  const bytes=new Uint8Array(buffer); let binary='';
+  const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk) binary+=String.fromCharCode(...bytes.subarray(i,i+chunk));
+  return btoa(binary);
+}
+function base64ToBuffer(base64){
+  const binary=atob(base64), bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+  return bytes.buffer;
+}
+async function exportData(){
+ const roles=state.roles.map(r=>({...r,image:r.image?bufferToBase64(r.image):null}));
+ const payload={version:2,exportedAt:new Date().toISOString(),categories:state.categories,series:state.series,roles,history:state.history};
+ const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='暗号完整备份-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('完整备份已导出（含角色图片）');
+}
+$('#exportBtn').onclick=exportData;$('#importBtn').onclick=()=>$('#importFile').click();
+$('#importFile').onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{
+   const p=JSON.parse(await f.text());
+   if(!p.categories||!p.series||!p.roles)throw Error();
+   if(!confirm('恢复备份会覆盖当前角色、系列、分类和历史记录，确定吗？'))return;
+   for(const store of ['categories','series','roles','history'])for(const x of await getAll(store))await del(store,x.id);
+   for(const x of p.categories)await put('categories',x);
+   for(const x of p.series)await put('series',x);
+   for(const x of p.roles){
+     const copy={...x};
+     if(typeof copy.image==='string')copy.image=base64ToBuffer(copy.image);
+     await put('roles',copy);
+   }
+   for(const x of (p.history||[]))await put('history',x);
+   selectedSeries.clear();await load();toast('恢复成功，角色图片也已恢复');
+ }catch(err){console.error(err);toast('备份文件格式不正确或已损坏')}
+ e.target.value=''
+};
+
+(async()=>{try{await openDB();await load();showStartupPassword()}catch(e){console.error(e);toast('浏览器不支持本地数据保存') }})();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
