@@ -1,4 +1,4 @@
-const CACHE = 'anhao-pwa-v20';
+const CACHE = 'anhao-pwa-v22';
 const ASSETS = ['./','./index.html','./manifest.json','./sw.js','./icon-192.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
