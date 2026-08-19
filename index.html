@@ -308,47 +308,24 @@ body.keyboard-open #historyModal .history-modal{max-height:calc(var(--vvh,100dvh
 @media(max-width:390px){#batchRoleModal .batch-preview-wrap{flex-basis:270px;height:270px;min-height:270px;max-height:270px}}
 </style>
 
-<style id="final-purple-draw-button">
-/* 抽取按钮：参考用户示例的圆润胶囊形，使用更柔和的主题紫 */
-.draw-actions .primary#drawBtn{
-  width:clamp(150px,22vw,210px);
-  min-width:150px;
-  height:64px;
-  min-height:64px;
-  padding:0 34px;
-  border:0;
-  border-radius:999px;
-  background:linear-gradient(180deg,#b35bb5 0%,#a34cae 48%,#9144a0 100%) !important;
-  color:#fff;
-  font-size:21px;
-  font-weight:800;
-  letter-spacing:1px;
-  box-shadow:0 6px 0 #77377f,0 10px 24px rgba(145,68,160,.24) !important;
-  transition:transform .12s ease,box-shadow .12s ease,filter .12s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-.draw-actions .primary#drawBtn:active{
-  transform:translateY(3px);
-  box-shadow:0 3px 0 #77377f,0 7px 16px rgba(145,68,160,.20) !important;
-}
-.draw-actions .primary#drawBtn:disabled{
-  opacity:.55;
-  filter:saturate(.7);
-}
-@media (max-width:600px){
-  .draw-actions .primary#drawBtn{
-    width:min(190px,48vw);
-    min-width:140px;
-    height:60px;
-    min-height:60px;
-    padding:0 28px;
-    font-size:20px;
-  }
-}
-</style>
 
 
-<style id="ui-polish-v9">
+
+
+
+
+
+
+
+
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#b7d3f4">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+<style id="final-ui">
+/* Final UI: Pastel Purple → Dream Sky，扁平无厚度 */
+
 :root{
  --purple:#7651d8;--purple2:#9676eb;--purple3:#f0ebff;
  --ink:#292333;--muted:#8b8498;--line:#e9e4f0;--bg:#f6f4fa;
@@ -411,13 +388,9 @@ html,body{background:linear-gradient(180deg,#faf8fd 0%,#f1eef7 100%);color:var(-
  .draw-card{border-radius:24px!important}
  .settings-section{border-radius:17px!important}
 }
-</style>
 
 
-<style id="dream-gradient-v10">
-/* ===== 第10版：梦境渐变 Dream Haze 配色 =====
-   Palette: #7181c8 / #abadcc / #b7d3f4 / #f1cfed / #f1e5f6
-*/
+/* Dream Haze palette: #7181c8 / #abadcc / #b7d3f4 / #f1cfed / #f1e5f6 */
 :root{
   --dream-deep:#7181c8;
   --dream-lav:#abadcc;
@@ -608,54 +581,9 @@ html,body{
   .draw-card{border-radius:22px}
   .draw-actions{background:rgba(248,249,253,.94)}
 }
-</style>
 
-<style id="flat-dream-ui">
-/* 第11版：抽取按钮与问号卡牌改为轻盈扁平风格 */
-.draw-actions .primary#drawBtn,
-.draw-actions .primary#drawBtn:hover,
-.draw-actions .primary#drawBtn:focus,
-.primary{
-  background:#abadcc !important;
-  color:#fff !important;
-  border:0 !important;
-  box-shadow:none !important;
-  text-shadow:none !important;
-  transform:none;
-}
-.draw-actions .primary#drawBtn:active,
-.primary:active{
-  background:#abadcc !important;
-  box-shadow:none !important;
-  transform:scale(.985);
-}
-.draw-actions .primary#drawBtn:disabled{
-  background:#abadcc !important;
-  box-shadow:none !important;
-  opacity:.52;
-}
-/* 问号卡牌与按钮完全同色、无厚边、无投影 */
-.empty-card,
-.flip-back{
-  background:#abadcc !important;
-  border:0 !important;
-  box-shadow:none !important;
-  background-image:none !important;
-}
-.empty-card:before,
-.flip-back:before{
-  display:none !important;
-}
-.question-mark,
-.empty-card:after{
-  background:rgba(255,255,255,.12) !important;
-  border:1px solid rgba(255,255,255,.45) !important;
-  box-shadow:none !important;
-}
-</style>
 
-<style id="flat-two-color-gradient-v12">
-/* 第12版：Pastel Purple → Dream Sky，两色柔和渐变；保持完全扁平无厚度 */
+/* Final flat gradient: Pastel Purple → Dream Sky */
 .draw-actions .primary#drawBtn,
 .draw-actions .primary#drawBtn:hover,
 .draw-actions .primary#drawBtn:focus,
@@ -693,10 +621,8 @@ html,body{
   border:1px solid rgba(255,255,255,.42) !important;
   box-shadow:none !important;
 }
+
 </style>
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#b7d3f4">
-  <link rel="apple-touch-icon" href="./icon-192.png">
 </head>
 <body>
 <div class="app">
