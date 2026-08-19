@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
-<meta content="#abadcc" name="theme-color"/>
-<meta content="yes" name="mobile-web-app-capable"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
-<meta content="暗号" name="apple-mobile-web-app-title"/>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" name="viewport"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
-<meta content="#abadcc" name="theme-color"/>
+<meta name="theme-color" content="#abadcc">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="暗号">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#abadcc">
 <title>暗号 · 手机试用版</title>
-<style>:root{
+<style>
+:root{
   --purple:#7c3aed; --purple2:#9b63f5; --purple3:#f4eafa;
   --ink:#302a35; --muted:#8b8391; --line:#e8e1ec; --bg:#f5f1f7;
   --card:#fff; --shadow:0 12px 32px rgba(83,45,105,.10);
@@ -290,7 +290,9 @@ body.keyboard-open #historyModal .history-modal{max-height:calc(var(--vvh,100dvh
 @media (orientation:portrait){
   .draw-card{min-height:calc(100dvh - 190px - env(safe-area-inset-bottom));}
 }
+</style>
 
+<style>
 .data-modal,.batch-modal{width:min(720px,94vw)!important;max-height:calc(var(--vvh,100vh) - 24px)!important;overflow:hidden!important}.batch-modal{z-index:3501!important}.batch-single{display:flex;flex-direction:column;gap:12px;min-height:0}.batch-single #batchName{width:100%;font-size:16px;padding:12px 13px;border:1px solid var(--line);border-radius:13px;box-sizing:border-box}.batch-preview-wrap{display:flex;align-items:center;justify-content:center;min-height:220px;max-height:48vh;background:#faf7fc;border:1px solid #eee7f1;border-radius:18px;overflow:hidden}.batch-preview-wrap img{display:block;width:100%;height:100%;max-height:48vh;object-fit:contain}.batch-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}.batch-nav button{min-height:44px}.batch-counter{text-align:center;font-size:11px;color:#918696}.batch-foot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}.batch-foot button{min-height:48px}
 .data-selects{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.data-selects label{display:grid;gap:5px;font-size:11px;color:#8e8393}.data-selects select{border:1px solid var(--line);border-radius:13px;padding:11px;background:#fff;font-size:14px}.data-summary{font-size:11px;color:#918696;margin:2px 0 8px}.data-modal .list-scroll{max-height:none;flex:1;min-height:0;overflow:auto}.data-role-list{padding-left:0}.batch-file-list{display:grid;gap:7px;max-height:34vh;overflow:auto}.batch-file-row{display:flex;align-items:center;gap:8px;border:1px solid #eee7f1;border-radius:12px;padding:7px 9px}.batch-file-row span{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.batch-file-row input{width:42%;border:1px solid var(--line);border-radius:9px;padding:8px}.batch-note{font-size:11px;color:#9b90a1}.data-role-only .role-row{padding:8px 0}.data-role-only .role-row .danger{padding:7px 9px}.primary{background:#7c3aed!important;box-shadow:0 10px 24px rgba(124,58,237,.24)!important}.primary:disabled{opacity:.55}
 /* 批量添加：弹窗自身滚动，键盘出现时内容不会被压缩；图片区域保持稳定尺寸 */
@@ -304,7 +306,24 @@ body.keyboard-open #historyModal .history-modal{max-height:calc(var(--vvh,100dvh
 #batchRoleModal .batch-nav{position:relative;z-index:2}
 @media(max-width:620px){.data-selects{grid-template-columns:1fr}.data-modal,.batch-modal{width:min(94vw,560px)!important}.batch-file-row{align-items:flex-start;flex-wrap:wrap}.batch-file-row input{width:100%}#batchRoleModal .batch-preview-wrap{flex-basis:300px;height:300px;min-height:300px;max-height:300px}}
 @media(max-width:390px){#batchRoleModal .batch-preview-wrap{flex-basis:270px;height:270px;min-height:270px;max-height:270px}}
+</style>
 
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#b7d3f4">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+<style id="final-ui">
 /* Final UI: Pastel Purple → Dream Sky，扁平无厚度 */
 
 :root{
@@ -369,6 +388,7 @@ html,body{background:linear-gradient(180deg,#faf8fd 0%,#f1eef7 100%);color:var(-
  .draw-card{border-radius:24px!important}
  .settings-section{border-radius:17px!important}
 }
+
 
 /* Dream Haze palette: #7181c8 / #abadcc / #b7d3f4 / #f1cfed / #f1e5f6 */
 :root{
@@ -562,6 +582,7 @@ html,body{
   .draw-actions{background:rgba(248,249,253,.94)}
 }
 
+
 /* Final flat gradient: Pastel Purple → Dream Sky */
 .draw-actions .primary#drawBtn,
 .draw-actions .primary#drawBtn:hover,
@@ -601,6 +622,9 @@ html,body{
   box-shadow:none !important;
 }
 
+</style>
+
+<style id="ipad-v13-ui">
 /* iPad 优化：1～3 张尽可能放大，但上下留出呼吸空间 */
 .draw-card .result-area{padding:14px 4px 18px!important;overflow:hidden!important}
 .draw-result-stage{height:100%;min-height:0!important}
@@ -635,7 +659,9 @@ html,body{
 #batchRoleModal .file-label{cursor:pointer!important;touch-action:manipulation!important}
 #batchRoleModal #batchFiles{font-size:16px!important}
 @media(max-width:620px){#batchRoleModal .batch-preview-wrap{flex-basis:280px!important;height:280px!important;min-height:280px!important;max-height:280px!important}}
+</style>
 
+<style id="ipad-v14-history-and-grid">
 /* iPad v14：抽取 4～12 张允许自然换行，避免第 5 张被抽取区裁掉 */
 .draw-card .result-area{overflow:auto!important;-webkit-overflow-scrolling:touch!important;}
 .draw-result-grid[data-count="4"],
@@ -713,152 +739,157 @@ html,body{
 }
 </style>
 
-<link href="./manifest.json" rel="manifest"/>
-<meta content="#b7d3f4" name="theme-color"/>
-<link href="./icon-192.png" rel="apple-touch-icon"/>
-
 </head>
 <body>
 <div class="app">
-<header class="topbar">
-<div class="header-strip">
-<div class="header-title">暗号</div>
-<div class="header-nav">
-<button class="top-nav-btn active" id="filterBtn">
-<span><b>卡池</b><small id="filterSub">全部系列</small></span>
-</button>
-<button class="top-nav-btn" id="historyTopBtn">
-<span><b>历史</b><small id="historyTopCount">0 次</small></span>
-</button>
-<button class="top-nav-btn" id="settingsTopBtn">
-<span><b>设置</b><small>管理与保存</small></span>
-</button>
+  <header class="topbar">
+    <div class="header-strip">
+      <div class="header-title">暗号</div>
+      <div class="header-nav">
+        <button class="top-nav-btn active" id="filterBtn">
+          <span><b>卡池</b><small id="filterSub">全部系列</small></span>
+        </button>
+        <button class="top-nav-btn" id="historyTopBtn">
+          <span><b>历史</b><small id="historyTopCount">0 次</small></span>
+        </button>
+        <button class="top-nav-btn" id="settingsTopBtn">
+          <span><b>设置</b><small>管理与保存</small></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card draw-card">
+      <div class="filter-row" style="display:none">
+        <button class="selector" id="legacyFilterBtn"><span><strong id="filterTitle">全部系列</strong><small id="legacyFilterSub">点击选择，可多选系列</small></span><span>⌄</span></button>
+      </div>
+      <div id="badges" class="badges"></div>
+      <div class="result-area" id="resultArea">
+        <div class="result-empty"><div class="empty-card" aria-hidden="true"></div><div class="empty-hint">选择系列后开始抽取</div></div>
+      </div>
+      <div class="draw-actions">
+        <div class="count-control"><button id="minus">−</button><span id="count">1</span><button id="plus">＋</button></div>
+        <button class="primary" id="drawBtn">抽</button>
+      </div>
+    </section>
+
+  </main>
+
 </div>
-</div>
-</header>
-<main class="layout">
-<section class="card draw-card">
-<div class="filter-row" style="display:none">
-<button class="selector" id="legacyFilterBtn"><span><strong id="filterTitle">全部系列</strong><small id="legacyFilterSub">点击选择，可多选系列</small></span><span>⌄</span></button>
-</div>
-<div class="badges" id="badges"></div>
-<div class="result-area" id="resultArea">
-<div class="result-empty"><div aria-hidden="true" class="empty-card"></div><div class="empty-hint">选择系列后开始抽取</div></div>
-</div>
-<div class="draw-actions">
-<div class="count-control"><button id="minus">−</button><span id="count">1</span><button id="plus">＋</button></div>
-<button class="primary" id="drawBtn">抽</button>
-</div>
-</section>
-</main>
-</div>
+
 <div class="overlay" id="historyModal">
-<div class="modal history-modal">
-<div class="modal-head"><div><div class="pool-kicker">HISTORY</div><h3>抽取历史 <small id="historyCount" style="font-size:11px;color:#918696;font-weight:600"></small></h3></div><button class="close" data-close="historyModal">×</button></div>
-<div class="history" id="history"></div>
-<div class="history-actions"><button class="secondary" id="clearHistory" style="width:100%">清空记录</button></div>
+  <div class="modal history-modal">
+    <div class="modal-head"><div><div class="pool-kicker">HISTORY</div><h3>抽取历史 <small id="historyCount" style="font-size:11px;color:#918696;font-weight:600"></small></h3></div><button class="close" data-close="historyModal">×</button></div>
+    <div class="history" id="history"></div>
+    <div class="history-actions"><button class="secondary" style="width:100%" id="clearHistory">清空记录</button></div>
+  </div>
 </div>
-</div>
+
 <div class="overlay" id="passwordModal">
-<div class="modal password-modal">
-<div class="modal-head"><div><div class="pool-kicker">PRIVATE</div><h3>进入暗号</h3></div></div>
-<div style="font-size:12px;color:#918696;margin:-4px 0 12px">首次进入请设置密码；以后每次打开网页时输入一次即可。</div>
-<div class="form"><input autocomplete="off" id="passwordInput" inputmode="numeric" maxlength="12" pattern="[0-9]*" placeholder="请输入 4～12 位数字密码" type="password"/><div id="passwordHint" style="font-size:11px;color:#9b90a1"></div>
-<div class="modal-foot"><button class="purple" id="passwordSubmit">进入暗号</button></div>
-<button class="startup-restore" id="startupRestoreBtn" type="button">我已有网页版数据，恢复备份</button>
-<div class="startup-restore-note" id="startupRestoreNote">如果你是在 Safari 里先添加过角色，再从主屏幕打开，iPad 会把两者当成不同的本地存储空间。请先在 Safari 导出完整备份，再在这里恢复。</div>
-</div>
-</div>
+  <div class="modal password-modal">
+    <div class="modal-head"><div><div class="pool-kicker">PRIVATE</div><h3>进入暗号</h3></div></div>
+    <div style="font-size:12px;color:#918696;margin:-4px 0 12px">首次进入请设置密码；以后每次打开网页时输入一次即可。</div>
+    <div class="form"><input id="passwordInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="off" placeholder="请输入 4～12 位数字密码"><div id="passwordHint" style="font-size:11px;color:#9b90a1"></div>
+      <div class="modal-foot"><button class="purple" id="passwordSubmit">进入暗号</button></div>
+      <button class="startup-restore" id="startupRestoreBtn" type="button">我已有网页版数据，恢复备份</button>
+      <div class="startup-restore-note" id="startupRestoreNote">如果你是在 Safari 里先添加过角色，再从主屏幕打开，iPad 会把两者当成不同的本地存储空间。请先在 Safari 导出完整备份，再在这里恢复。</div>
+    </div>
+  </div>
 </div>
 <div class="overlay" id="filterModal">
-<div class="pool-modal">
-<div class="pool-top">
-<div>
-<div class="pool-kicker">CHARACTER POOL</div>
-<h3>选择抽取卡池</h3>
-<div class="pool-sub" id="poolSummary">未选择系列 · 将从全部角色中抽取</div>
+  <div class="pool-modal">
+    <div class="pool-top">
+      <div>
+        <div class="pool-kicker">CHARACTER POOL</div>
+        <h3>选择抽取卡池</h3>
+        <div class="pool-sub" id="poolSummary">未选择系列 · 将从全部角色中抽取</div>
+      </div>
+      <button class="close" data-close="filterModal">×</button>
+    </div>
+    <div class="pool-toolbar">
+      <div class="pool-search-wrap"><span>⌕</span><input id="filterSearch" placeholder="搜索分类或系列…"></div>
+      <button class="pool-action" id="selectAllSeries">全选</button>
+      <button class="pool-action" id="clearSeries">清空</button>
+    </div>
+    <div class="pool-body" id="filterTree"></div>
+    <div class="pool-bottom">
+      <div class="pool-selected"><span class="selected-dot"></span><b id="selectedPoolCount">0</b><span>个系列</span><i></i><b id="selectedRoleCount">全部</b><span>款角色</span></div>
+      <div class="pool-selection-note" id="poolSelectionNote">可展开到角色层级精准选择</div>
+      <button class="pool-confirm" id="applyFilter">应用卡池</button>
+    </div>
+  </div>
 </div>
-<button class="close" data-close="filterModal">×</button>
-</div>
-<div class="pool-toolbar">
-<div class="pool-search-wrap"><span>⌕</span><input id="filterSearch" placeholder="搜索分类或系列…"/></div>
-<button class="pool-action" id="selectAllSeries">全选</button>
-<button class="pool-action" id="clearSeries">清空</button>
-</div>
-<div class="pool-body" id="filterTree"></div>
-<div class="pool-bottom">
-<div class="pool-selected"><span class="selected-dot"></span><b id="selectedPoolCount">0</b><span>个系列</span><i></i><b id="selectedRoleCount">全部</b><span>款角色</span></div>
-<div class="pool-selection-note" id="poolSelectionNote">可展开到角色层级精准选择</div>
-<button class="pool-confirm" id="applyFilter">应用卡池</button>
-</div>
-</div>
-</div>
+
 <div class="overlay" id="formModal">
-<div class="modal">
-<div class="modal-head"><h3 id="formTitle">添加角色</h3><button class="close" data-close="formModal">×</button></div>
-<div id="formBody"></div>
+  <div class="modal">
+    <div class="modal-head"><h3 id="formTitle">添加角色</h3><button class="close" data-close="formModal">×</button></div>
+    <div id="formBody"></div>
+  </div>
 </div>
-</div>
+
 <div class="overlay" id="batchRoleModal">
-<div class="modal batch-modal">
-<div class="modal-head"><div><div class="pool-kicker">BATCH ADD</div><h3>批量添加角色</h3></div><button class="close" data-close="batchRoleModal">×</button></div>
-<div class="batch-single">
-<select id="batchSeries"></select>
-<label class="file-label" id="batchChooseLabel">添加角色图片<input accept="image/*,.heic,.heif" id="batchFiles" multiple="" type="file"/></label>
-<input id="batchName" placeholder="请输入角色名字"/>
-<div class="batch-preview-wrap"><img alt="上传的角色图片" id="batchPreview"/></div>
-<div class="batch-nav"><button class="secondary" id="batchPrev">上一张</button><button class="secondary" id="batchNext">下一张</button></div>
-<div class="batch-counter" id="batchCounter">尚未选择图片</div>
-<div class="batch-foot"><button class="secondary" data-close="batchRoleModal">取消</button><button class="purple" id="saveBatch">批量保存</button></div>
-</div>
-</div>
+  <div class="modal batch-modal">
+    <div class="modal-head"><div><div class="pool-kicker">BATCH ADD</div><h3>批量添加角色</h3></div><button class="close" data-close="batchRoleModal">×</button></div>
+    <div class="batch-single">
+      <select id="batchSeries"></select>
+      <label class="file-label" id="batchChooseLabel">添加角色图片<input id="batchFiles" type="file" accept="image/*,.heic,.heif" multiple></label>
+      <input id="batchName" placeholder="请输入角色名字">
+      <div class="batch-preview-wrap"><img id="batchPreview" alt="上传的角色图片"></div>
+      <div class="batch-nav"><button class="secondary" id="batchPrev">上一张</button><button class="secondary" id="batchNext">下一张</button></div>
+      <div class="batch-counter" id="batchCounter">尚未选择图片</div>
+      <div class="batch-foot"><button class="secondary" data-close="batchRoleModal">取消</button><button class="purple" id="saveBatch">批量保存</button></div>
+    </div>
+  </div>
 </div>
 <div class="overlay" id="settingsModal">
-<div class="modal settings-modal">
-<div class="modal-head"><div><div class="pool-kicker">SETTINGS</div><h3>设置</h3></div><button class="close" data-close="settingsModal">×</button></div>
-<div class="settings-grid">
-<section class="settings-section">
-<h4>角色管理</h4>
-<p>管理分类、系列和角色。添加角色时会自动压缩图片，减少本地存储占用。</p>
-<div class="settings-actions">
-<button class="manage-btn" id="addCategory"><b>新建 IP</b><span>创建 IP</span></button>
-<button class="manage-btn" id="addSeries"><b>新建系列</b><span>创建系列</span></button>
-<button class="manage-btn" id="addRole"><b>添加角色</b><span>上传图片和名字</span></button>
-<button class="manage-btn" id="batchAddRole"><b>批量添加角色</b><span>一次选择多张图片，按文件名生成角色</span></button>
-<button class="manage-btn" id="viewData"><b>管理已有数据</b><span>查看 / 删除</span></button>
-</div>
-</section>
-<section class="settings-section">
-<h4>本地保存</h4>
-<p>角色、图片、分类、系列和抽取历史保存在本设备浏览器中。建议定期导出完整备份。</p>
-<div class="settings-actions">
-<button class="manage-btn" id="exportBtn"><b>导出完整备份</b><span>包含角色图片和历史</span></button>
-<button class="manage-btn" id="importBtn"><b>恢复备份</b><span>从 JSON 恢复数据</span></button>
-</div>
-<input accept=".json,application/json" hidden="" id="importFile" type="file"/>
-</section>
-</div>
-<div class="settings-divider"></div>
-<div class="settings-actions">
-<button class="manage-btn" id="lockManagement"><b>锁定</b><span>重新输入密码</span></button>
-<button class="manage-btn" id="changePassword"><b>修改密码</b><span>更换暗号密码</span></button>
-</div>
-<div class="settings-note" style="margin-top:12px">提示：锁定后不会关闭网页，只会再次要求输入密码。数据仍保存在本设备浏览器中。</div>
-</div>
+  <div class="modal settings-modal">
+    <div class="modal-head"><div><div class="pool-kicker">SETTINGS</div><h3>设置</h3></div><button class="close" data-close="settingsModal">×</button></div>
+    <div class="settings-grid">
+      <section class="settings-section">
+        <h4>角色管理</h4>
+        <p>管理分类、系列和角色。添加角色时会自动压缩图片，减少本地存储占用。</p>
+        <div class="settings-actions">
+          <button class="manage-btn" id="addCategory"><b>新建 IP</b><span>创建 IP</span></button>
+          <button class="manage-btn" id="addSeries"><b>新建系列</b><span>创建系列</span></button>
+          <button class="manage-btn" id="addRole"><b>添加角色</b><span>上传图片和名字</span></button>
+          <button class="manage-btn" id="batchAddRole"><b>批量添加角色</b><span>一次选择多张图片，按文件名生成角色</span></button>
+          <button class="manage-btn" id="viewData"><b>管理已有数据</b><span>查看 / 删除</span></button>
+        </div>
+      </section>
+      <section class="settings-section">
+        <h4>本地保存</h4>
+        <p>角色、图片、分类、系列和抽取历史保存在本设备浏览器中。建议定期导出完整备份。</p>
+        <div class="settings-actions">
+          <button class="manage-btn" id="exportBtn"><b>导出完整备份</b><span>包含角色图片和历史</span></button>
+          <button class="manage-btn" id="importBtn"><b>恢复备份</b><span>从 JSON 恢复数据</span></button>
+        </div>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </section>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-actions">
+      <button class="manage-btn" id="lockManagement"><b>锁定</b><span>重新输入密码</span></button>
+      <button class="manage-btn" id="changePassword"><b>修改密码</b><span>更换暗号密码</span></button>
+    </div>
+    <div class="settings-note" style="margin-top:12px">提示：锁定后不会关闭网页，只会再次要求输入密码。数据仍保存在本设备浏览器中。</div>
+  </div>
 </div>
 <div class="overlay" id="dataModal">
-<div class="modal data-modal">
-<div class="modal-head"><div><div class="pool-kicker">DATA</div><h3>数据管理</h3></div><button class="close" data-close="dataModal">×</button></div>
-<div class="data-selects">
-<label><span>IP</span><select id="dataCatSelect"></select></label>
-<label><span>系列</span><select id="dataSeriesSelect"></select></label>
-</div>
-<div class="data-summary" id="dataSummary"></div>
-<div class="list-scroll" id="dataBody"></div>
-</div>
+  <div class="modal data-modal">
+    <div class="modal-head"><div><div class="pool-kicker">DATA</div><h3>数据管理</h3></div><button class="close" data-close="dataModal">×</button></div>
+    <div class="data-selects">
+      <label><span>IP</span><select id="dataCatSelect"></select></label>
+      <label><span>系列</span><select id="dataSeriesSelect"></select></label>
+    </div>
+    <div id="dataSummary" class="data-summary"></div>
+    <div id="dataBody" class="list-scroll"></div>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
-<script>const DB='CharacterPickerDB', VER=1;
+
+<script>
+const DB='CharacterPickerDB', VER=1;
 let db, state={categories:[],series:[],roles:[],history:[]};
 let selectedSeries=new Set(), draftSeries=new Set(), selectedRoles=new Set(), draftRoles=new Set(), drawCount=1, drawing=false;
 
@@ -1211,7 +1242,8 @@ $('#importFile').onchange=async e=>{await restoreBackupFile(e.target.files[0]);e
 $('#startupRestoreBtn').onclick=()=>$('#importFile').click();
 
 (async()=>{try{await openDB();await load();showStartupPassword()}catch(e){console.error(e);toast('浏览器不支持本地数据保存') }})();
-
+</script>
+<script>
 // iPad 键盘弹出时，把正在输入的控件自动带到可视区域，避免横屏输入框被键盘遮住。
 document.addEventListener('focusin', e => {
   const el=e.target;
@@ -1228,11 +1260,11 @@ if(window.visualViewport){
     }
   });
 }
-
+</script>
+<script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 }
 </script>
-
 </body>
 </html>
