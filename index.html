@@ -150,7 +150,7 @@ body.keyboard-open #historyModal .history-modal{max-height:calc(var(--vvh,100dvh
 .pool-category-head{background:#fbf9fc;font-weight:800}.pool-category-head .chev,.pool-series-head .chev{width:20px;text-align:center;color:#7c3aed;font-weight:900}
 .pool-check{width:19px;height:19px;accent-color:#7c3aed;flex:0 0 auto}.pool-category-name,.pool-series-name2{flex:1;min-width:0;font-weight:800}.pool-count{font-size:11px;color:#999}
 .pool-series-wrap{display:none;padding:0 9px 8px}.pool-category.open .pool-series-wrap{display:block}
-.pool-series-block{border-top:1px solid #f0ebf2}.pool-series-head{padding:9px 3px}.pool-role-list{display:none;padding:0 0 8px 28px}.pool-series-block.open .pool-role-list{display:grid;gap:5px}
+.pool-series-block{border-top:1px solid #f0ebf2}.pool-series-head{padding:9px 3px}.pool-role-list{display:none;width:calc(100% - 16px);margin:0 auto 8px;padding:0;box-sizing:border-box}.pool-series-block.open .pool-role-list{display:grid;gap:6px}
 .pool-role-row{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:10px;background:#faf8fb}.pool-role-row span{flex:1;font-size:13px}.pool-role-row small{font-size:10px;color:#999}
 .pool-selection-note{font-size:11px;color:#8f8594;margin-top:4px}
 @media (orientation:landscape) and (max-height:820px){.draw-card{min-height:calc(100dvh - 132px - env(safe-area-inset-bottom));padding:10px}.draw-card .result-area{padding:6px 0 10px}.draw-actions{min-height:64px;padding:6px 14px calc(6px + env(safe-area-inset-bottom))} .primary{min-height:48px;padding:10px 34px}.count-control button{height:38px}.count-control span{font-size:20px}}
@@ -290,7 +290,7 @@ html,body{background:linear-gradient(180deg,#faf8fd 0%,#f1eef7 100%);color:var(-
 .draw-card{background:rgba(255,255,255,.94)!important;border:1px solid rgba(230,224,238,.95)!important;border-radius:28px!important;box-shadow:0 18px 48px rgba(66,48,94,.10)!important}
 .result-area{background:radial-gradient(circle at 50% 42%,rgba(239,233,255,.42),transparent 42%);border-radius:22px}
 .empty-card,.flip-back{background:radial-gradient(circle at 28% 18%,rgba(255,255,255,.25),transparent 30%),linear-gradient(145deg,#7450d5,#8d68df 55%,#6040bd)!important;border-color:rgba(255,255,255,.88)!important;box-shadow:0 20px 42px rgba(103,76,180,.24),inset 0 0 0 2px rgba(255,255,255,.15)!important}
-.question-mark,.empty-card:after{background:rgba(255,255,255,.09)!important;border-color:rgba(255,255,255,.62)!important}
+.empty-card:after{background:rgba(255,255,255,.09)!important;border-color:rgba(255,255,255,.62)!important}
 .draw-actions{background:rgba(255,255,255,.88)!important;border-top:1px solid rgba(227,222,235,.9)!important;box-shadow:0 -10px 32px rgba(63,50,88,.09)!important}
 .count-control{background:#f6f2fb!important;border:1px solid #e6deef!important;box-shadow:none!important}
 .count-control button{color:#6d55a8!important}
@@ -413,7 +413,7 @@ html,body{
   box-shadow:0 18px 38px rgba(91,103,164,.20),inset 0 0 0 2px rgba(255,255,255,.20);
 }
 .empty-card:before,.flip-back:before{border-color:rgba(255,255,255,.62)}
-.empty-card:after,.question-mark{
+.empty-card:after{
   background:rgba(255,255,255,.14);
   border-color:rgba(255,255,255,.68);
   box-shadow:0 0 0 8px rgba(255,255,255,.07);
@@ -559,11 +559,28 @@ html,body{
 }
 .empty-card:before,
 .flip-back:before{display:none !important}
-.question-mark,
 .empty-card:after{
   background:rgba(255,255,255,.12) !important;
   border:1px solid rgba(255,255,255,.42) !important;
   box-shadow:none !important;
+}
+
+/* 抽卡背面问号：独立定义，避免被空卡片样式覆盖 */
+.question-mark{
+  width:66px;
+  height:66px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  box-sizing:border-box;
+  color:#fff;
+  font-size:46px;
+  line-height:1;
+  font-weight:800;
+  font-family:Georgia,'Times New Roman',serif;
+  background:rgba(255,255,255,.12) !important;
+  border:1px solid rgba(255,255,255,.48) !important;
+  box-shadow:0 0 0 7px rgba(255,255,255,.06) !important;
 }
 
 /* v21：唯一的抽卡布局规则。删除旧版互相覆盖的 overflow / grid 规则。 */
@@ -670,10 +687,28 @@ body{
   }
 }
 
+/* 历史记录：每次抽取为一组，缩略图横向排列；历史弹窗本身仍可滚动 */
+.history-batch{padding:12px 2px 13px;border-bottom:1px solid #eee9f2}
+.history-batch-head{display:flex;align-items:center;gap:8px;min-height:30px}
+.history-batch-title{font-size:15px;font-weight:850;color:#3c3446;line-height:1}
+.history-batch-time{font-size:11px;color:#91899a;white-space:nowrap}
+.history-batch-count{font-size:11px;color:#a19aa8;white-space:nowrap}
+.history-replay{margin-left:auto;border:0;border-radius:999px;padding:6px 11px;background:#eef1fb;color:#6670b5;font-size:11px;font-weight:800;line-height:1}
+.history-thumbs{display:flex;align-items:center;gap:9px;overflow-x:auto;overflow-y:hidden;padding:8px 1px 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.history-thumbs::-webkit-scrollbar{display:none;width:0;height:0}
+.history-thumb-wrap{width:48px;height:64px;flex:0 0 48px;border-radius:11px;overflow:hidden;background:#edf0f7}
+.history-thumb,.history-thumb-empty{width:100%;height:100%;display:block;object-fit:cover;border-radius:0}
+.history-thumb-empty{display:grid;place-items:center;background:linear-gradient(100deg,#abadcc 0%,#b7d3f4 100%);color:#fff;font-size:25px;font-weight:700}
+
 /* 小屏仍保持原有 1～2 张布局，但绝不让主抽卡区产生滚动 */
 @media (max-width:699px){
   .app{padding-bottom:calc(78px + env(safe-area-inset-bottom)) !important}
 }
+
+/* v25: expanded role list centered inside each series */
+.pool-role-list{width:calc(100% - 16px)!important;margin:0 auto 8px!important;padding:0!important;box-sizing:border-box!important}
+.pool-series-block.open .pool-role-list{display:grid!important;gap:6px!important}
+.pool-role-row{width:100%;box-sizing:border-box!important}
 </style>
 </head><body>
 <div class="app">
