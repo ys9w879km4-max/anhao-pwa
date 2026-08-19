@@ -706,9 +706,10 @@ body{
 }
 
 /* v25: expanded role list centered inside each series */
-.pool-role-list{width:calc(100% - 16px)!important;margin:0 auto 8px!important;padding:0!important;box-sizing:border-box!important}
 .pool-series-block.open .pool-role-list{display:grid!important;gap:6px!important}
-.pool-role-row{width:100%;box-sizing:border-box!important}
+/* 角色层：与系列内容保持同一视觉中心，左右留白对称 */
+.pool-role-list{width:100%!important;margin:0!important;padding:0 12px 8px!important;box-sizing:border-box!important}
+.pool-role-row{width:100%!important;box-sizing:border-box!important;margin:0!important}
 </style>
 </head><body>
 <div class="app">
